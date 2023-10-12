@@ -3,6 +3,8 @@ import PossibleAnswer from './PossibleAnswer'
 import { EAnswerType } from '@/@types/enums/Questions'
 import { useState } from 'react'
 import AnswerTypeNumber from './AnswerTypeNumber'
+import AnswerTypeZkProof from './AnswerTypeZkProof'
+import AnswerTypeMultiple from './AnswerTypeMultipe'
 
 function Question (props : any) {
   const question : Question = props.question
@@ -23,10 +25,13 @@ function Question (props : any) {
             >
               <MenuItem value={EAnswerType.multipleAnswer}>Multiple choices</MenuItem>
               <MenuItem value={EAnswerType.number}>Number</MenuItem>
-              <MenuItem value={EAnswerType.fromZkProof}>With ZkProof</MenuItem>
+              <MenuItem value={EAnswerType.fromZkProof}>From ZkProof</MenuItem>
             </Select>
           </FormControl>
           {answerType === EAnswerType.number ? <AnswerTypeNumber /> : null}
+          {answerType === EAnswerType.fromZkProof ? <AnswerTypeZkProof /> : null}
+          {answerType === EAnswerType.multipleAnswer ? <AnswerTypeMultiple /> : null}
+
         </Stack>
         {/* <Stack>
           {question.possibleAnswers?.map((possibleAnswer, index) => <PossibleAnswer title={possibleAnswer.title} key={index} />)}

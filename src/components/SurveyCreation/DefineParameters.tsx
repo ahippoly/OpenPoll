@@ -10,6 +10,7 @@ function DefineParameters () {
       <Typography component='h2' variant='h6' color='primary' gutterBottom>
         Define Parameters
       </Typography>
+      <FormControlLabel control={<Checkbox />} label='This poll has no end time' />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker label='Set end of the poll' />
         <FormControlLabel control={<Checkbox />} label='Define tokens as reward' />
