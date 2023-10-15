@@ -10,16 +10,19 @@ import { Button, CssBaseline, Divider, Stack } from '@mui/material'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import MainPage from './pages/MainPage'
 import CreateSurvey from './pages/CreateSurvey'
+import BrowseSurvey from './pages/BrowseSurvey'
 
 export function App () {
   const [count, setCount] = useState(0)
-  const [pageIndex, setPageIndex] = useState(1)
+  const [pageIndex, setPageIndex] = useState(2)
   const GlobalContext = createContext('global')
 
   function definePageRender () {
     switch (pageIndex) {
       case 1 :
         return <CreateSurvey />
+      case 2 :
+        return <BrowseSurvey />
       default:
         return <MainPage />
     }

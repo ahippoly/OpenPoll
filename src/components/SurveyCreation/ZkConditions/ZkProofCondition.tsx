@@ -13,21 +13,34 @@ function ZkProofCondition (props: any) {
     })
   }
 
+  const updateMinimumCondition = (newMinimumCondition: number) => {
+    updateZkSource({
+      ...zkSource,
+      minimumCondition: newMinimumCondition,
+    })
+  }
+
   return (
     <>
       <SismoGroupContext.Provider value={{ dataGroup: zkSource.dataGroup, updateSelectedSource: onUpdateSelectedSource }}>
         <SourceSelector />
-        <Typography>
-          Choose minimum condition
-        </Typography>
+        <Typography component='h2' variant='h6'>Select a Datasource</Typography>
         <Stack direction='row' spacing={2}>
-          <Slider />
+          <Slider
+            value={zkSource.minimumCondition}
+            onChange={(event, newValue) => {
+              updateMinimumCondition(newValue as number)
+            }}
+          />
           <TextField
-          // value={value}
           // onChange={handleInputChange}
           // onBlur={handleBlur}
+            onChange={(event) => {
+              updateMinimumCondition(Number(event.target.value))
+            }}
             sx={{ width: 200 }}
             variant='outlined'
+            value={zkSource.minimumCondition}
             inputProps={{
               step: 10,
               min: 0,

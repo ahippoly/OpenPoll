@@ -23,13 +23,11 @@ function DefineZkProofs () {
   }
 
   return (
-    <Paper variant='outlined' sx={{ p: globalPadding }}>
+    <Paper variant='outlined' sx={{ p: globalPadding, display: 'flex', gap: 2, flexDirection: 'column' }}>
 
       <Typography component='h2' variant='h6' color='primary' gutterBottom>
         Ask For ZkProofs
       </Typography>
-
-      <p>{JSON.stringify(zkSources)}</p>
 
       <Stack spacing={2}>
         {zkSources.map((zkSource, index) =>
@@ -41,9 +39,9 @@ function DefineZkProofs () {
             />))}
       </Stack>
 
-      <Fab color='primary' aria-label='add' variant='extended' onClick={addZkSource}>
+      <Fab sx={{ alignSelf: 'flex-end' }} color='primary' aria-label='add' variant='extended' onClick={addZkSource}>
         <Add sx={{ mr: 1 }} />
-        Add
+        Add condition
       </Fab>
     </Paper>
   )
