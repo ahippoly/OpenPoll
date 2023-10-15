@@ -1,26 +1,24 @@
 import { searchGroupByDescription } from '@/utils/sismoApi'
 import { Autocomplete, Box, Button, FormControl, InputLabel, MenuItem, Select, Slider, Stack, TextField, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import SourceFinder from './SourceFinder'
+import { SismoGroupContext } from '@/constants/contexts'
 
 function valuetext (value: number) {
   return `${value}°C`
 }
 
-function SourceSelector () {
-  const [value, setValue] = useState<number[]>([20, 37])
+function SourceSelector (props: any) {
+  // const [selectedDataGroup, setselectedDataGroup] = useState<SismoGroup>()
 
-  const handleChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number[])
-  }
+  const { dataGroup, updateSelectedSource } = useContext(SismoGroupContext)
 
   return (
-    <Box>
+    <Stack spacing={2}>
       <Typography component='h2' variant='h6'>Select a Datasource</Typography>
       <Stack spacing={2}>
 
-        <TextField variant='outlined' label='From data source Id' />
-        <FormControl fullWidth variant='outlined'>
+        {/* <FormControl fullWidth variant='outlined'>
           <InputLabel>From already known data source</InputLabel>
           <Select
             label='From already known data source'
@@ -29,21 +27,13 @@ function SourceSelector () {
             <MenuItem value={2}>DataSrouce2</MenuItem>
             <MenuItem value={3}>DataSrouce3</MenuItem>
           </Select>
-        </FormControl>
+        </FormControl> */}
         <SourceFinder />
       </Stack>
-
-      <Button onClick={() => searchGroupByDescription('aave')}>
-        Salut
-      </Button>
-      <Slider
-        getAriaLabel={() => 'Temperature range'}
-        value={value}
-        onChange={handleChange}
-        valueLabelDisplay='auto'
-        getAriaValueText={valuetext}
-      />
-    </Box>
+      <Typography>
+        Selected Data Group : {dataGroup?.description}
+      </Typography>
+    </Stack>
   )
 }
 

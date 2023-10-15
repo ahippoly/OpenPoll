@@ -1,20 +1,30 @@
-import { Card, CardContent, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material'
-import PossibleAnswer from './PossibleAnswer'
+import { Card, CardContent, Fab, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material'
 import { EAnswerType } from '@/@types/enums/Questions'
-import { useState } from 'react'
+import { createContext, useState } from 'react'
 import AnswerTypeNumber from './AnswerTypeNumber'
 import AnswerTypeZkProof from './AnswerTypeZkProof'
 import AnswerTypeMultiple from './AnswerTypeMultipe'
+import Delete from '@mui/icons-material/Delete'
+import { QuestionContext, SismoGroupContext } from '@/constants/contexts'
 
 function Question (props : any) {
   const question : Question = props.question
   const [answerType, setAnswerType] = useState<EAnswerType>(EAnswerType.multipleAnswer)
+  const removeQuestion : () => void = props.onDelete
+  const onQuestionChange : (newQuestion: Question) => void = props.onChange
+
+  const onTitleChange = (event: any) => {
+    onQuestionChange({
+      ...question,
+      title: event.target.value,
+    })
+  }
 
   return (
     <Card>
       <CardContent>
-        <Stack spacing={2}>
-          <TextField label='Question text' value={question.title} />
+        <Stack spacing={2} direction='column' alignItems='stretch'>
+          <TextField label='Question text' value={question.title} onChange={onTitleChange} />
           <FormControl fullWidth variant='outlined'>
             <InputLabel>Answer type</InputLabel>
             <Select
@@ -28,10 +38,16 @@ function Question (props : any) {
               <MenuItem value={EAnswerType.fromZkProof}>From ZkProof</MenuItem>
             </Select>
           </FormControl>
-          {answerType === EAnswerType.number ? <AnswerTypeNumber /> : null}
-          {answerType === EAnswerType.fromZkProof ? <AnswerTypeZkProof /> : null}
-          {answerType === EAnswerType.multipleAnswer ? <AnswerTypeMultiple /> : null}
+          <QuestionContext.Provider value={{ question, onQuestionChange }}>
+            {answerType === EAnswerType.number ? <AnswerTypeNumber /> : null}
+            {answerType === EAnswerType.fromZkProof ? <AnswerTypeZkProof /> : null}
+            {answerType === EAnswerType.multipleAnswer ? <AnswerTypeMultiple /> : null}
+          </QuestionContext.Provider>
 
+          <Fab onClick={(event) => removeQuestion()} color='error' aria-label='add' variant='extended' sx={{ alignSelf: 'flex-end' }}>
+            <Delete sx={{ mr: 1 }} />
+            Remove
+          </Fab>
         </Stack>
         {/* <Stack>
           {question.possibleAnswers?.map((possibleAnswer, index) => <PossibleAnswer title={possibleAnswer.title} key={index} />)}

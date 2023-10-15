@@ -7,4 +7,9 @@ declare global {
     {
         title: string
     }
+    interface ZkSource
+    {
+        minimumCondition?: number
+        dataGroup?: SismoGroup
+    }
 }

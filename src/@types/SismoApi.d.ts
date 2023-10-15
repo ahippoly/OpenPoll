@@ -8,6 +8,7 @@ declare global {
         id: string
         name: string
         specs: string
+        numberOfAccounts: number
     }
 
 }

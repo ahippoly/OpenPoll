@@ -6,12 +6,42 @@ export const searchGroupByDescription = async (description: string) => {
         id
         name
         specs
+        latestSnapshot {
+          valueDistribution {
+            numberOfAccounts
+          }
+        }
       }
     }`
 
   const variables = {
     where: {
       description_contains: description,
+    },
+  }
+
+  return fetchSismo(query, variables)
+}
+
+export const searchGroupBySpecs = async (specs: string) => {
+  const query = `
+    query ExampleQuery($where: Group_filter) {
+      groups(where: $where) {
+        description
+        id
+        name
+        specs
+        latestSnapshot {
+          valueDistribution {
+            numberOfAccounts
+          }
+        }
+      }
+    }`
+
+  const variables = {
+    where: {
+      specs_contains: specs,
     },
   }
 
@@ -26,6 +56,11 @@ export const searchGroupByName = async (name: string) => {
           id
           name
           specs
+          latestSnapshot {
+            valueDistribution {
+              numberOfAccounts
+            }
+          }
         }
       }
       `
@@ -70,7 +105,13 @@ const fetchSismo = async (query: string, variables: object) => {
     body: JSON.stringify({ query, variables }),
   })
   const { data, errors } = await res.json()
-  const groups : SismoGroup[] = data.groups
+  const groups : SismoGroup[] = data.groups.map((group: any) => ({
+    description: group.description,
+    id: group.id,
+    name: group.name,
+    specs: group.specs,
+    numberOfAccounts: group.latestSnapshot?.valueDistribution[0]?.numberOfAccounts,
+  }))
 
   return { groups, errors }
 }

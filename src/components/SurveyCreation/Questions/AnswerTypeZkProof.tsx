@@ -1,14 +1,22 @@
 import { Autocomplete, Box, FormControl, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import SourceSelector from './SourceSelector'
-
-function valuetext (value: number) {
-  return `${value}°C`
-}
+import { QuestionContext, SismoGroupContext } from '@/constants/contexts'
 
 function AnswerTypeZkProof () {
+  const { question, onQuestionChange } = useContext(QuestionContext)
+
+  const updateSelectedSource = (newSource: SismoGroup) => {
+    onQuestionChange({
+      ...question,
+      zkAnswer: newSource,
+    })
+  }
+
   return (
-    <SourceSelector />
+    <SismoGroupContext.Provider value={{ dataGroup: question.zkAnswer, updateSelectedSource }}>
+      <SourceSelector />
+    </SismoGroupContext.Provider>
   )
 }
 
