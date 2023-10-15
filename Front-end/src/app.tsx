@@ -14,7 +14,7 @@ import BrowseSurvey from './pages/BrowseSurvey'
 
 export function App () {
   const [count, setCount] = useState(0)
-  const [pageIndex, setPageIndex] = useState(2)
+  const [pageIndex, setPageIndex] = useState(1)
   const GlobalContext = createContext('global')
 
   function definePageRender () {

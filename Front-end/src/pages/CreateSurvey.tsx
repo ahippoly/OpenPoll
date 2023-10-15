@@ -1,9 +1,10 @@
-import { Box, Container, Fab, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, Fab, TextField, Typography } from '@mui/material'
 import { Fragment } from 'react'
 import AddIcon from '@mui/icons-material/Add'
 import Questions from '@/components/SurveyCreation/Questions/Questions'
 import DefineZkProofs from '@/components/SurveyCreation/DefineZkProofs'
 import DefineParameters from '@/components/SurveyCreation/DefineParameters'
+import { uploadBackend } from '@/utils/uploadBackend'
 
 function CreateSurvey () {
   return (
@@ -14,6 +15,7 @@ function CreateSurvey () {
       maxWidth: 600,
       margin: 'auto',
       alignItems: 'stretch',
+      mb: 8,
     }}
     >
 
@@ -25,6 +27,9 @@ function CreateSurvey () {
       <Questions />
       <DefineZkProofs />
       <DefineParameters />
+      <Button onClick={() => uploadBackend({ name: 'super', content: 'test' })}>
+        Submit
+      </Button>
     </Box>
 
   )
