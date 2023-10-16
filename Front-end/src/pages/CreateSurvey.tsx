@@ -5,6 +5,7 @@ import Questions from '@/components/SurveyCreation/Questions/Questions'
 import DefineZkProofs from '@/components/SurveyCreation/DefineZkProofs'
 import DefineParameters from '@/components/SurveyCreation/DefineParameters'
 import { uploadBackend } from '@/utils/uploadBackend'
+import ConfirmCreation from '@/components/SurveyCreation/ConfirmCreation'
 
 function CreateSurvey () {
   return (
@@ -27,9 +28,8 @@ function CreateSurvey () {
       <Questions />
       <DefineZkProofs />
       <DefineParameters />
-      <Button onClick={() => uploadBackend({ name: 'super', content: 'test' })}>
-        Submit
-      </Button>
+      <ConfirmCreation />
+
     </Box>
 
   )

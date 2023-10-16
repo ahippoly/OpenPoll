@@ -15,6 +15,21 @@ export default defineConfig(configEnv => ({
     }),
     svgrPlugin(),
   ],
+  build: {
+    target: ['esnext'], // 👈 build.target
+  },
+  optimizeDeps: { // 👈 optimizedeps
+    esbuildOptions: {
+      target: 'esnext',
+      // Node.js global to browser globalThis
+      define: {
+        global: 'globalThis',
+      },
+      supported: {
+        bigint: true,
+      },
+    },
+  },
   server: {
     port: 3000,
   },
