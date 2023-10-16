@@ -1,10 +1,12 @@
-import { Input, Slide, Slider, Stack, TextField, Typography } from '@mui/material'
+import { Fab, Input, Slide, Slider, Stack, TextField, Typography } from '@mui/material'
 import SourceSelector from '../Questions/SourceSelector'
 import { SismoGroupContext } from '@/constants/contexts'
+import Delete from '@mui/icons-material/Delete'
 
 function ZkProofCondition (props: any) {
   const zkSource: ZkSource = props.zkSource
   const updateZkSource: (newZkSource: ZkSource) => void = props.updateZkSource
+  const removeZkSource = props.removeZkSource
 
   const onUpdateSelectedSource = (newSource: SismoGroup) => {
     updateZkSource({
@@ -52,6 +54,10 @@ function ZkProofCondition (props: any) {
             }}
           />
         </Stack>
+        <Fab onClick={(event) => removeZkSource()} color='error' aria-label='add' variant='extended' sx={{ alignSelf: 'flex-end' }}>
+          <Delete sx={{ mr: 1 }} />
+          Remove
+        </Fab>
 
       </SismoGroupContext.Provider>
     </>

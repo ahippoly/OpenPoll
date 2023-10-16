@@ -25,6 +25,7 @@ function SourceFinder (props: any) {
       .sort((a, b) => b.numberOfAccounts - a.numberOfAccounts)
 
     setOptions(groups)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue])
 
   const onInputChange = (newInputValue: string) => {

@@ -1,8 +1,9 @@
 import Add from '@mui/icons-material/Add'
 import { Fab, Paper, Stack, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Question from './Question'
 import { globalPadding } from '@/constants/globalSX'
+import { SismoButtonContext, SurvveyCreationContext } from '@/constants/contexts'
 
 const defaultQuestion: Question = {
   title: '',
@@ -14,25 +15,31 @@ const defaultQuestion: Question = {
 
 function Questions () {
   const [seed, setSeed] = useState(Math.random())
-  const [questions, setQuestions] = useState<Question[]>([JSON.parse(JSON.stringify(defaultQuestion))])
+  const { surveyObj, setSurveyObj } = useContext(SurvveyCreationContext)
 
   const addQuestion = () => {
-    setQuestions((previousPrevious) => [...previousPrevious, JSON.parse(JSON.stringify(defaultQuestion))])
+    setSurveyObj((previous: Survey) => {
+      const newSurvey = { ...previous }
+      newSurvey.questions = [...previous.questions, JSON.parse(JSON.stringify(defaultQuestion))]
+      return newSurvey
+    })
   }
 
   const removeQuestion = (index: number) => {
-    setQuestions((previous) => {
-      const newQuestions = [...previous]
-      newQuestions.splice(index, 1)
-      return newQuestions
+    setSurveyObj((previous: Survey) => {
+      const newSurvey = { ...previous }
+      newSurvey.questions.splice(index, 1)
+      console.log('🚀 ~ file: Questions.tsx:32 ~ setSurveyObj ~ newSurvey:', newSurvey)
+
+      return newSurvey
     })
   }
 
   const onQuestionChange = (index: number, newQuestion: Question) => {
-    setQuestions((previous) => {
-      const newQuestions = [...previous]
-      newQuestions[index] = newQuestion
-      return newQuestions
+    setSurveyObj((previous: Survey) => {
+      const newSurvey = { ...previous }
+      newSurvey.questions[index] = newQuestion
+      return newSurvey
     })
   }
 
@@ -43,7 +50,7 @@ function Questions () {
       </Typography>
 
       <Stack spacing={2}>
-        {questions.map((question, index) =>
+        {(surveyObj.questions as Question[]).map((question, index) =>
           (
             <Question
               question={question}

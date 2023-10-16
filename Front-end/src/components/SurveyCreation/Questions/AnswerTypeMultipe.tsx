@@ -20,8 +20,6 @@ function AnswerTypeMultiple (props: any) {
   const { question, onQuestionChange } = useContext(QuestionContext)
 
   const addAnswer = () => {
-    console.log('🚀 ~ file: AnswerTypeMultipe.tsx:21 ~ AnswerTypeMultiple ~ question:', question)
-
     onQuestionChange({
       ...question,
       possibleAnswers: [...question.possibleAnswers, ''],

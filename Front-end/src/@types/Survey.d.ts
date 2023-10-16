@@ -8,7 +8,12 @@ declare global {
         zkProofs: ZkSource[]
         endTimestamp: number
         tokenRewardAmount: number // In ether
-        erc20RewardTokenAddress: string
+        questions: Question[]
+    }
+
+    interface ProofRequire
+    {
+        zkProofs: ZkSource[]
         questions: Question[]
     }
 

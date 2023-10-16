@@ -1,24 +1,34 @@
 import { globalPadding } from '@/constants/globalSX'
 import Add from '@mui/icons-material/Add'
 import { Box, Fab, Paper, Stack, Typography } from '@mui/material'
-import ZkProofCondition from './ZkConditions/ZkProofCondition'
-import { useState } from 'react'
+import ZkProofCondition from './ZkProofCondition'
+import { useState, useContext, useEffect } from 'react'
+import { SismoButtonContext, SurvveyCreationContext } from '@/constants/contexts'
 
 function DefineZkProofs () {
-  const [zkSources, setZkSources] = useState<ZkSource[]>([])
+  const { surveyObj, setSurveyObj } = useContext(SurvveyCreationContext)
 
   const addZkSource = () => {
-    setZkSources((previous) => [...previous, {
-      minimumCondition: 10,
-      dataGroup: undefined,
-    }])
+    setSurveyObj((previous: Survey) => {
+      const newSurvey = { ...previous }
+      newSurvey.zkProofs = [...previous.zkProofs, { minimumCondition: 0 }]
+      return newSurvey
+    })
   }
 
   const updateZkSource = (index: number, newZkSource: ZkSource) => {
-    setZkSources((previous) => {
-      const newZkSources = [...previous]
-      newZkSources[index] = newZkSource
-      return newZkSources
+    setSurveyObj((previous: Survey) => {
+      const newSurvey = { ...previous }
+      newSurvey.zkProofs[index] = newZkSource
+      return newSurvey
+    })
+  }
+
+  const removeZkSource = (index: number) => {
+    setSurveyObj((previous: Survey) => {
+      const newSurvey = { ...previous }
+      newSurvey.zkProofs.splice(index, 1)
+      return newSurvey
     })
   }
 
@@ -30,12 +40,13 @@ function DefineZkProofs () {
       </Typography>
 
       <Stack spacing={2}>
-        {zkSources.map((zkSource, index) =>
+        {(surveyObj.zkProofs as ZkSource[]).map((zkSource, index) =>
           (
             <ZkProofCondition
               key={index}
               zkSource={zkSource}
               updateZkSource={(newZkSource: ZkSource) => updateZkSource(index, newZkSource)}
+              removeZkSource={() => removeZkSource(index)}
             />))}
       </Stack>
 
