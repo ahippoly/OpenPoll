@@ -22,7 +22,7 @@ function ConfirmCreation () {
   const submitSurvey = () => {
     if (isLoading) return
     setIsLoading(true)
-    uploadBackend({ name: 'super', content: 'test' })
+    uploadBackend({ name: 'super', content: Math.random().toFixed(5) })
       .finally(() => setIsLoading(false))
   }
 

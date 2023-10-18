@@ -58,7 +58,7 @@ async function storeWithProgress (files) {
   
     // client.put will invoke our callbacks during the upload
     // and return the root cid when the upload completes
-    return client.put(files, { onRootCidReady, onStoredChunk })
+    return client.put(files, { onRootCidReady, onStoredChunk, wrapWithDirectory: false })
 }
 
 async function storeFiles (files) {
