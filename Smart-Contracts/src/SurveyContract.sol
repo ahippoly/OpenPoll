@@ -1,97 +1,146 @@
-// // SPDX-License-Identifier: MIT
-// pragma solidity ^0.8.13;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
 
-// contract SurveyContract {
+contract SurveyContract {
+    struct ZkSource {
+        uint256 minimumRequired;
+        bytes16 groupId;
+    }
 
-//     struct ZkSource
-//     {
-//         uint256 minimumRequired;
-//         bytes16 groupId;
-//     }
+    struct QuestionNumber {
+        uint256 minimumValue;
+        uint256 maximumValue;
+    }
 
-//     struct QuestionNumber
-//     {
-//         uint256 minimumValue;
-//         uint256 maximumValue;
-//     }
+    struct QuestionZkSource {
+        bytes16 groupId;
+    }
 
-//     struct QuestionZkSource
-//     {
-//         bytes16 groupId;
-//     }
+    struct QuestionMultiple {
+        uint256 possibleAnswers;
+    }
 
-//     struct QuestionMultiple
-//     {
-//         uint256 possibleAnswers;
-//     }
+    struct Survey {
+        uint256 rewardByAnswer;
+        uint256 remainingRewardToken;
+        uint256 endTimestamp;
 
-//     struct Survey {
-//         uint256 rewardByAnswer;
-//         uint256 remainingRewardToken;
-//         uint256 endTimestamp;
-//         ZkSource[] zkSources;
-//         QuestionMultiple[] questionMultiples;
-//         QuestionNumber[] questionNumbers;
-//         QuestionZkSource[] questionZkSources;
-//     }
+        uint256 zkSourceStartIndex;
+        uint256 zkSourceEndIndex;
 
-//     mapping(uint256 => Survey) public surveys;
-//     mapping(uint256 => mapping(address => bool)) public surveyResponders;
-//     uint256 public surveyCount;
-    
-//     event SurveyPublished(string name, uint256 id);
-//     event SurveyAnswered(uint256 id, address responder);
+        uint256 questionMultipleStartIndex;
+        uint256 questionMultipleEndIndex;
 
-//     function publishSurvey(
-//         string memory _name,
-//         QuestionMultiple[] memory _questionMultiples,
-//         QuestionNumber[] memory _questionsNumber, 
-//         QuestionZkSource[] memory _questionZkSources,
-//         uint256 _rewardByAnswer,
-//         uint256 _endTimestamp
-//         ) public payable {
-//             require(_questionMultiples.length > 0 || _questionsNumber.length > 0 || _questionZkSources.length > 0 , "Questions list cannot be empty");
+        uint256 questionNumberStartIndex;
+        uint256 questionNumberEndIndex;
 
-//             for (uint256 i = 0; i < _questionMultiples.length; i++) {
-//                 require(_questionMultiples[i].possibleAnswers > 0, "Possible answers must be greater than 0");
-//             }
+        uint256 questionZkSourceStartIndex;
+        uint256 questionZkSourceEndIndex;
+    }
 
-//             for (uint256 i = 0; i < _questionsNumber.length; i++) {
-//                 require(_questionsNumber[i].minimumValue < _questionsNumber[i].maximumValue, "Minimum value must be less than maximum value");
-//             }
+    mapping(uint256 => ZkSource) zkSources;
+    uint256 zkSourceCount;
 
-//             Survey memory newSurvey = Survey({
-//                 rewardByAnswer: _rewardByAnswer,
-//                 remainingRewardToken: msg.value,
-//                 endTimestamp: _endTimestamp,
-//                 zkSources: new ZkSource[](0),
-//                 questionNumbers: new QuestionNumber[](0),
-//                 questionZkSources: new QuestionZkSource[](0),
-//                 questionMultiples: new QuestionMultiple[](0)
-//             });
+    mapping(uint256 => QuestionNumber) questionNumbers;
+    uint256 questionNumberCount;
 
-//             surveys[surveyCount] = newSurvey;
+    mapping(uint256 => QuestionZkSource) questionZkSources;
+    uint256 questionZkSourceCount;
 
-//             emit SurveyPublished(_name, surveyCount);
+    mapping(uint256 => QuestionMultiple) questionMultiples;
+    uint256 questionMultipleCount;
 
-//             surveyCount++;
-//     }
 
-//     // function answerSurvey(uint256 _id, string[][] memory _answers) public {
-//     //     require(_id < surveys.length, "Invalid survey ID");
-//     //     require(_answers.length == surveys[_id].questions.length, "Answers list length must match survey questions list length");
-//     //     require(!surveys[_id].answered[msg.sender], "You have already answered this survey");
+    mapping(uint256 => Survey) public surveys;
+    uint256 public surveyCount;
 
-//     //     surveys[_id].answered[msg.sender] = true;
-//     //     // surveyResponders[_id].push(msg.sender);
+    event SurveyPublished(string name, uint256 id);
+    event SurveyAnswered(uint256 id, address responder);
 
-//     //     emit SurveyAnswered(_id, msg.sender);
-//     // }
+    function publishSurvey(
+        string memory _name,
+        ZkSource[] memory _zkSources,
+        QuestionMultiple[] memory _questionMultiples,
+        QuestionNumber[] memory _questionsNumber,
+        QuestionZkSource[] memory _questionZkSources,
+        uint256 _rewardByAnswer,
+        uint256 _endTimestamp
+    ) public payable {
+        require(
+            _questionMultiples.length > 0 ||
+            _questionsNumber.length > 0 ||
+            _questionZkSources.length > 0,
+            "Questions list cannot be empty"
+        );
 
-//     // function getSurvey(uint256 _id) public view returns (string memory name, uint256 reward, string[] memory questions, string[][] memory answers, uint256 respondersCount) {
-//     //     require(_id < surveys.length, "Invalid survey ID");
+        for (uint256 i = 0; i < _questionMultiples.length; i++) {
+            require(_questionMultiples[i].possibleAnswers > 0, "Possible answers must be greater than 0");
+        }
 
-//     //     Survey storage survey = surveys[_id];
-//     //     return (survey.name, survey.reward, survey.questions, survey.answers, surveyResponders[_id].length);
-//     // }
-// }
+        for (uint256 i = 0; i < _questionsNumber.length; i++) {
+            require(_questionsNumber[i].minimumValue < _questionsNumber[i].maximumValue, "Minimum value must be less than maximum value");
+        }
+
+        Survey storage newSurvey = surveys[surveyCount];
+        
+        newSurvey.rewardByAnswer = _rewardByAnswer;
+        newSurvey.remainingRewardToken = msg.value;
+        newSurvey.endTimestamp = _endTimestamp;
+
+        newSurvey.zkSourceStartIndex = zkSourceCount;
+        newSurvey.questionMultipleStartIndex = questionMultipleCount;
+
+        newSurvey.questionNumberStartIndex = questionNumberCount;
+        newSurvey.questionZkSourceStartIndex = questionZkSourceCount;
+
+        newSurvey.zkSourceEndIndex = zkSourceCount + _questionZkSources.length;
+        newSurvey.questionMultipleEndIndex = questionMultipleCount + _questionMultiples.length;
+        
+        newSurvey.questionNumberEndIndex = questionNumberCount + _questionsNumber.length;
+        newSurvey.questionZkSourceEndIndex = questionZkSourceCount + _questionZkSources.length;
+
+        // Add questions to the survey
+        for (uint256 i = 0; i < _zkSources.length; i++) {
+            zkSources[zkSourceCount] = ZkSource({
+                minimumRequired: _zkSources[i].minimumRequired,
+                groupId: _zkSources[i].groupId
+            });
+            zkSourceCount++;
+        }
+
+        for (uint256 i = 0; i < _questionMultiples.length; i++) {
+            questionMultiples[questionMultipleCount] = QuestionMultiple({
+                possibleAnswers: _questionMultiples[i].possibleAnswers
+            });
+            questionMultipleCount++;
+        }
+
+        for (uint256 i = 0; i < _questionsNumber.length; i++) {
+            questionNumbers[questionNumberCount] = QuestionNumber({
+                minimumValue: _questionsNumber[i].minimumValue,
+                maximumValue: _questionsNumber[i].maximumValue
+            });
+            questionNumberCount++;
+        }
+
+        for (uint256 i = 0; i < _questionZkSources.length; i++) {
+            questionZkSources[questionZkSourceCount] = QuestionZkSource({
+                groupId: _questionZkSources[i].groupId
+            });
+            questionZkSourceCount++;
+        }
+
+        for (uint256 i = 0; i < _questionMultiples.length; i++) {
+            questionMultiples[questionMultipleCount] = QuestionMultiple({
+                possibleAnswers: _questionMultiples[i].possibleAnswers
+            });
+            questionMultipleCount++;
+        }
+
+        emit SurveyPublished(_name, surveyCount);
+
+        surveyCount++;
+
+        
+    }
+}
