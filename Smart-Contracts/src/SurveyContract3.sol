@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-contract SurveyContract {
+import "sismo-connect-solidity/SismoConnectLib.sol"; 
+
+
+contract SurveyContract is SismoConnect {
     struct ZkSource {
         uint256 minimumRequired;
         bytes16 groupId;
@@ -29,6 +32,9 @@ contract SurveyContract {
     mapping(string => Survey) public surveys;
     uint256 public surveyCount;
 
+    // It is answer by survey by VaultId
+    mapping(string => mapping(uint256 => bool)) public anwers;
+
     event SurveyPublished(
         string name,        
         string fileCID,
@@ -39,7 +45,98 @@ contract SurveyContract {
         bytes16[] questionZkSource
     );
 
-    event SurveyAnswered(uint256 id, address responder);
+    event SurveyAnswered(string fileCID, uint8[] answers, uint256[] zkAnswers );
+
+    constructor(bytes16 appId) SismoConnect(buildConfig(appId, true)) {}
+
+    function answerSurvey(
+        string memory fileCID,
+        bytes memory sismoConnectResponse,
+        uint8[] memory answers
+    ) public payable {
+        Survey storage survey = surveys[fileCID];
+
+        require(
+            survey.endTimestamp > block.timestamp,
+            "Survey is not available anymore"
+        );
+
+        require(
+            survey.remainingRewardToken >= survey.rewardByAnswer,
+            "Survey has no more reward token"
+        );
+
+        require(
+            answers.length == survey.numberOfQuestions,
+            "Invalid number of answers"
+        );
+
+        ClaimRequest[] memory claims = new ClaimRequest[](
+            survey.zkSourceNumber + survey.questionZkSourceNumber
+        );
+
+        uint256 claimIndex = 0;
+
+        for (
+            uint256 i = survey.zkSourceStartIndex;
+            i < survey.zkSourceStartIndex + survey.zkSourceNumber;
+            i++
+        ) {
+            claims[claimIndex++] = buildClaim({
+                groupId: zkSources[i].groupId, 
+                isOptional: false, 
+                value: zkSources[i].minimumRequired,
+                isSelectableByUser: false
+            });
+        }
+
+        for (
+            uint256 i = survey.questionZkSourceStartIndex;
+            i <
+            survey.questionZkSourceStartIndex + survey.questionZkSourceNumber;
+            i++
+        ) {
+            claims[claimIndex++] = buildClaim({
+                groupId: questionZkSources[i],
+                isOptional: false,
+                value: 0, //hope to not have error
+                isSelectableByUser: true
+            });
+        }
+
+        SismoConnectVerifiedResult memory result = verify({
+            responseBytes: sismoConnectResponse,
+            claims: claims
+        });
+
+        uint256 vaultId = SismoConnectHelper.getUserId(
+            result,
+            AuthType.VAULT
+        );
+
+        //require answer to be false
+        require(
+            !anwers[fileCID][vaultId],
+            "You have already answered this survey"
+        );
+
+        anwers[fileCID][vaultId] = true;
+        survey.remainingRewardToken -= survey.rewardByAnswer;
+
+        //get zk answers from SismoConnectVerifiedResult
+        uint256[] memory zkAnswers = new uint256[](survey.questionZkSourceNumber);
+        uint256 zkAnswerIndex = 0;
+        for (
+            uint256 i = survey.zkSourceNumber;
+            i <
+            survey.zkSourceNumber + survey.questionZkSourceNumber;
+            i++
+        ) {
+            zkAnswers[zkAnswerIndex++] = result.claims[i].value;
+        }
+
+        emit SurveyAnswered(fileCID, answers, zkAnswers);
+    }
 
     function publishSurvey(
         string memory _name,

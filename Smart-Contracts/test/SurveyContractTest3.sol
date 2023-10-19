@@ -12,7 +12,7 @@ contract SurveyContractTest is DSTest {
 
     function setUp() public {
         // Deploy a new instance of SurveyContract
-        surveyContract = new SurveyContract();
+        surveyContract = new SurveyContract(0xce36ae7bbc3221fdba8b40923b7efd32);
     }
 
     function test_PublishSurvey() public {
