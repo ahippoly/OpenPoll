@@ -3,7 +3,6 @@ pragma solidity ^0.8.13;
 
 import "sismo-connect-solidity/SismoConnectLib.sol"; 
 
-
 contract SurveyContract is SismoConnect {
     struct ZkSource {
         uint256 minimumRequired;
@@ -136,6 +135,17 @@ contract SurveyContract is SismoConnect {
         }
 
         emit SurveyAnswered(fileCID, answers, zkAnswers);
+    }
+
+    function refillSurvey(string memory fileCID) public payable {
+        Survey storage survey = surveys[fileCID];
+
+        require(
+            survey.endTimestamp > block.timestamp,
+            "Survey is not available anymore"
+        );
+
+        survey.remainingRewardToken += msg.value;
     }
 
     function publishSurvey(
