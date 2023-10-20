@@ -29,6 +29,7 @@ function ZkProofCondition (props: any) {
         <Typography component='h2' variant='h6'>Select a Datasource</Typography>
         <Stack direction='row' spacing={2}>
           <Slider
+            valueLabelDisplay='on'
             value={zkSource.minimumCondition}
             onChange={(event, newValue) => {
               updateMinimumCondition(newValue as number)

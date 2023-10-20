@@ -44,15 +44,15 @@ contract SurveyContract is SismoConnect {
         bytes16[] questionZkSource
     );
 
-    event SurveyAnswered(string fileCID, uint8[] answers, uint256[] zkAnswers );
+    event SurveyAnswered(string fileCID, uint256[] answers, uint256[] zkAnswers );
 
     constructor(bytes16 appId) SismoConnect(buildConfig(appId, true)) {}
 
     function answerSurvey(
         string memory fileCID,
         bytes memory sismoConnectResponse,
-        uint8[] memory answers
-    ) public payable {
+        uint256[] memory answers
+    ) public {
         Survey storage survey = surveys[fileCID];
 
         require(
@@ -63,6 +63,11 @@ contract SurveyContract is SismoConnect {
         require(
             survey.remainingRewardToken >= survey.rewardByAnswer,
             "Survey has no more reward token"
+        );
+
+        require(
+            address(this).balance >= survey.rewardByAnswer,
+            "Insufficient contract balance"
         );
 
         require(
@@ -120,6 +125,9 @@ contract SurveyContract is SismoConnect {
         );
 
         anwers[fileCID][vaultId] = true;
+
+        //pay token reward from contract to user
+        payable(msg.sender).transfer(survey.rewardByAnswer); 
         survey.remainingRewardToken -= survey.rewardByAnswer;
 
         //get zk answers from SismoConnectVerifiedResult

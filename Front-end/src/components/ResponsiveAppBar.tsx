@@ -13,8 +13,19 @@ import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import AssignmentIcon from '@mui/icons-material/Assignment'
-
-const pages = ['Answer', 'Create', 'Stats']
+import { ConnectKitButton } from 'connectkit'
+import { Link as RouterLink } from 'react-router-dom'
+import { Link } from '@mui/material'
+const pages = [{
+  title: 'Answer',
+  redirectTo: '/browse',
+}, {
+  title: 'Create',
+  redirectTo: '/create',
+}, {
+  title: 'Stats',
+  redirectTo: '/',
+}]
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 function ResponsiveAppBar () {
@@ -42,7 +53,7 @@ function ResponsiveAppBar () {
         variant='h6'
         noWrap
         component='a'
-        href='#app-bar-with-responsive-menu'
+        href=''
         sx={{
           mr: 2,
           display: { xs: 'none', md: 'flex' },
@@ -94,8 +105,10 @@ function ResponsiveAppBar () {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign='center'>{page}</Typography>
+                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                  <Link component={RouterLink} to={page.redirectTo} key={page.title}>
+                    <Typography textAlign='center'>{page.title}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
@@ -121,17 +134,19 @@ function ResponsiveAppBar () {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
+              <Link component={RouterLink} to={page.redirectTo} key={page.title}>
+                <Button
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page.title}
+                </Button>
+              </Link>
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <ConnectKitButton />
+
+          {/* <Box sx={{ flexGrow: 0 }}>
             <Tooltip title='Open settings'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
@@ -159,7 +174,7 @@ function ResponsiveAppBar () {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>

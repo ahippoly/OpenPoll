@@ -1,29 +1,29 @@
-import { Paper, Typography } from '@mui/material'
+import { Box, Paper, Typography } from '@mui/material'
 import { useReducer } from 'react'
 import SurveyItem from './SurveyItem'
 import { globalPadding } from '@/constants/globalSX'
+import { EAnswerType } from '@/@types/enums/Questions'
+import { defaultSurvey } from '@/mocks/SurveyMock'
+import { stringifyObject } from '@/utils/ObjUtils'
 
 export const surveyListReducerFunc = (state: any, action: ReducerPayload) => {
 
 }
 
-// const defaultSurvey: Survey = {
-//   title: '',
-//   questions: [],
-//   zkProofs: [],
-// }
-
 function SurveyList () {
-  const [surveyList, dispatch] = useReducer<any>(surveyListReducerFunc, [{}])
+  const [surveyList, dispatch] = useReducer<any>(surveyListReducerFunc, [JSON.parse(JSON.stringify(defaultSurvey))])
 
   return (
-    <Paper sx={{ p: globalPadding, display: 'flex', gap: 2, flexDirection: 'column' }}>
+    <Box sx={{ p: globalPadding, display: 'flex', gap: 2, flexDirection: 'column' }}>
       <Typography variant='h6' color='primary'>Survey List</Typography>
       {(surveyList as Survey[])
         .map((survey, index: number) => (
-          <SurveyItem key={index} survey={survey} />
+          <Box key={index}>
+            {/* <p> {stringifyObject(survey)} </p> */}
+            <SurveyItem key={index} survey={survey} />
+          </Box>
         ))}
-    </Paper>
+    </Box>
   )
 }
 

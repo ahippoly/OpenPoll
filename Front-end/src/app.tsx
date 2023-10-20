@@ -12,29 +12,48 @@ import MainPage from './pages/MainPage'
 import CreateSurvey from './pages/CreateSurvey'
 import BrowseSurvey from './pages/BrowseSurvey'
 
-export function App () {
-  const [count, setCount] = useState(0)
-  const [pageIndex, setPageIndex] = useState(1)
-  const GlobalContext = createContext('global')
+import { WagmiConfig, createConfig } from 'wagmi'
+import { ConnectKitProvider, ConnectKitButton, getDefaultConfig } from 'connectkit'
 
-  function definePageRender () {
-    switch (pageIndex) {
-      case 1 :
-        return <CreateSurvey />
-      case 2 :
-        return <BrowseSurvey />
-      default:
-        return <MainPage />
-    }
-  }
+const config = createConfig(
+  getDefaultConfig({
+    // Required API Keys
+    alchemyId: import.meta.env.ALCHEMY_ID, // or infuraId
+    walletConnectProjectId: import.meta.env.WALLETCONNECT_PROJECT_ID,
+
+    // Required
+    appName: 'Your App Name',
+
+    // Optional
+    appDescription: 'Your App Description',
+    appUrl: 'https://family.co', // your app's url
+    appIcon: 'https://family.co/logo.png', // your app's icon, no bigger than 1024x1024px (max. 1MB)
+  }),
+)
+
+export function App () {
+  const GlobalContext = createContext('global')
 
   return (
     <div className='App'>
-      <GlobalContext.Provider value='global'>
-        <CssBaseline />
-        <ResponsiveAppBar />
-        {definePageRender()}
-      </GlobalContext.Provider>
+      <WagmiConfig config={config}>
+        <ConnectKitProvider>
+          <GlobalContext.Provider value='global'>
+            <BrowserRouter>
+
+              <ResponsiveAppBar />
+
+              <Routes>
+                <Route path='/' element={<MainPage />} />
+                <Route path='/browse/*' element={<BrowseSurvey />} />
+                <Route path='/create' element={<CreateSurvey />} />
+              </Routes>
+            </BrowserRouter>
+            <CssBaseline />
+            {/* {definePageRender()} */}
+          </GlobalContext.Provider>
+        </ConnectKitProvider>
+      </WagmiConfig>
     </div>
   )
 }

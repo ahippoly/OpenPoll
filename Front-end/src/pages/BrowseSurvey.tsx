@@ -7,7 +7,7 @@ function BrowseSurvey () {
       display: 'flex',
       flexDirection: 'column',
       gap: 2,
-      maxWidth: 600,
+      maxWidth: 750,
       margin: 'auto',
       alignItems: 'stretch',
     }}

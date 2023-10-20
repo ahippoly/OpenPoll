@@ -7,6 +7,7 @@ import { SismoButtonContext, SurvveyCreationContext } from '@/constants/contexts
 
 const defaultQuestion: Question = {
   title: '',
+  order: 0,
   answerType: 'multipleAnswer',
   possibleAnswers: ['', '', ''],
   rangeAnswer: [0, 10],

@@ -15,6 +15,7 @@ function CreateSurvey () {
     endTimestamp: 0,
     tokenRewardAmount: 0,
     questions: [],
+    answers: [],
   })
 
   const updateTitle = (title: string) => {
@@ -30,7 +31,7 @@ function CreateSurvey () {
       display: 'flex',
       flexDirection: 'column',
       gap: 2,
-      maxWidth: 600,
+      maxWidth: 750,
       margin: 'auto',
       alignItems: 'stretch',
       mb: 8,
