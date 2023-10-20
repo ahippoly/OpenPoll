@@ -8,11 +8,6 @@ type SurveyAnswered @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type ZkSources @entity(immutable: true) {
-  minimumRequired: Bytes! # bytes16
-  groupId: BigInt! # uint256 
-}
-
 type SurveyPublished @entity(immutable: true) {
   id: Bytes!
   name: String! # string
@@ -20,7 +15,7 @@ type SurveyPublished @entity(immutable: true) {
   numberOfQuestions: BigInt! # uint32
   rewardByAnswer: BigInt! # uint256
   endTimestamp: BigInt! # uint256
-  zkSources: [ZkSources]! # tuple[]
+  zkSources: [Bytes!]! # tuple[]
   questionZkSource: [Bytes!]! # bytes16[]
   blockNumber: BigInt!
   blockTimestamp: BigInt!
