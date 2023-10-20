@@ -1,3 +1,4 @@
+import { Bytes } from "@graphprotocol/graph-ts"
 import {
   SurveyAnswered as SurveyAnsweredEvent,
   SurveyPublished as SurveyPublishedEvent
@@ -28,7 +29,7 @@ export function handleSurveyPublished(event: SurveyPublishedEvent): void {
   entity.numberOfQuestions = event.params.numberOfQuestions
   entity.rewardByAnswer = event.params.rewardByAnswer
   entity.endTimestamp = event.params.endTimestamp
-  entity.zkSources = event.params.zkSources
+  entity.zkSources = changetype<Bytes[]>(event.params.zkSources) 
   entity.questionZkSource = event.params.questionZkSource
 
   entity.blockNumber = event.block.number

@@ -1,0 +1,27 @@
+specVersion: 0.0.5
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Contract
+    network: sepolia
+    source:
+      address: "0xE0aA713050EA87AD4a0a096C464B4AAc23c0297C"
+      abi: Contract
+      startBlock: 4521019
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - SurveyAnswered
+        - SurveyPublished
+      abis:
+        - name: Contract
+          file: Contract\abis\Contract.json
+      eventHandlers:
+        - event: SurveyAnswered(string,uint8[],uint256[])
+          handler: handleSurveyAnswered
+        - event: SurveyPublished(string,string,uint32,uint256,uint256,(uint256,bytes16)[],bytes16[])
+          handler: handleSurveyPublished
+      file: Contract\Contract.wasm
