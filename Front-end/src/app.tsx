@@ -12,7 +12,7 @@ import MainPage from './pages/MainPage'
 import CreateSurvey from './pages/CreateSurvey'
 import BrowseSurvey from './pages/BrowseSurvey'
 
-import { WagmiConfig, createConfig } from 'wagmi'
+import { WagmiConfig, createConfig, sepolia } from 'wagmi'
 import { ConnectKitProvider, ConnectKitButton, getDefaultConfig } from 'connectkit'
 
 const config = createConfig(
@@ -22,10 +22,11 @@ const config = createConfig(
     walletConnectProjectId: import.meta.env.WALLETCONNECT_PROJECT_ID,
 
     // Required
-    appName: 'Your App Name',
+    appName: 'OpenSurvey',
+    chains: [sepolia],
 
     // Optional
-    appDescription: 'Your App Description',
+    appDescription: 'OpenSurvey is a decentralized survey platform.',
     appUrl: 'https://family.co', // your app's url
     appIcon: 'https://family.co/logo.png', // your app's icon, no bigger than 1024x1024px (max. 1MB)
   }),
