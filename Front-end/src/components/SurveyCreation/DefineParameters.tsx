@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from 'react'
 
 function DefineParameters () {
   const { surveyObj, setSurveyObj } = useContext(SurvveyCreationContext)
+  const [hasTokenRewards, setHasTokenRewards] = useState(false)
 
   const setEndTimestamp = (endTimestamp: number) => {
     setSurveyObj((previous: Survey) => {
@@ -30,7 +31,10 @@ function DefineParameters () {
   }
 
   const onCheckHasReward = (event: any) => {
-    if (surveyObj.tokenRewardAmount === 0) { setTokenAmount(10) } else { setTokenAmount(0) }
+    if (hasTokenRewards) {
+      setTokenAmount(0)
+      setHasTokenRewards(false)
+    } else { setHasTokenRewards(true) }
   }
 
   return (
@@ -45,9 +49,9 @@ function DefineParameters () {
           </LocalizationProvider>)
         : null}
       <FormControlLabel control={<Checkbox onChange={onCheckNoEndTime} checked={surveyObj.endTimestamp === 0} />} label='This poll has no end time' />
-      <FormControlLabel onChange={onCheckHasReward} checked={surveyObj.tokenRewardAmount > 0} control={<Checkbox />} label='Define tokens as reward' />
+      <FormControlLabel onChange={onCheckHasReward} checked={hasTokenRewards} control={<Checkbox />} label='Define tokens as reward (in ether)' />
 
-      {surveyObj.tokenRewardAmount > 0
+      {hasTokenRewards
         ? (
           <TextField
           // onChange={handleInputChange}

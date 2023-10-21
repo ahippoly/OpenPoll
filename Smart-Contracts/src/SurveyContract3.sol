@@ -166,8 +166,14 @@ contract SurveyContract is SismoConnect {
         bytes16[] memory _questionZkSource
     ) public payable {
         require(
-            _questionZkSource.length > 0 || _numberOfQuestions > 0,
+            _questionZkSource.length + _numberOfQuestions > 0,
             "Questions list cannot be empty"
+        );
+
+        //check if fileCID is already used
+        require(
+            surveys[fileCID].questionZkSourceNumber + surveys[fileCID].numberOfQuestions == 0 ,
+            "Survey with this fileCID already exists"
         );
 
         Survey storage newSurvey = surveys[fileCID];

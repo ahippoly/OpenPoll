@@ -9,7 +9,6 @@ import { QuestionContext, SismoGroupContext } from '@/constants/contexts'
 
 function Question (props : any) {
   const question : Question = props.question
-  const [answerType, setAnswerType] = useState<EAnswerType>(EAnswerType.multipleAnswer)
   const removeQuestion : () => void = props.onDelete
   const onQuestionChange : (newQuestion: Question) => void = props.onChange
 
@@ -17,6 +16,13 @@ function Question (props : any) {
     onQuestionChange({
       ...question,
       title: event.target.value,
+    })
+  }
+
+  const onAnsWerTypeChange = (event: any) => {
+    onQuestionChange({
+      ...question,
+      answerType: event.target.value,
     })
   }
 
@@ -30,8 +36,8 @@ function Question (props : any) {
             <Select
               label='Answer type'
               defaultValue={EAnswerType.multipleAnswer}
-              onChange={(event) => { setAnswerType(event.target.value as EAnswerType) }}
-              value={answerType}
+              onChange={onAnsWerTypeChange}
+              value={question.answerType}
             >
               <MenuItem value={EAnswerType.multipleAnswer}>Multiple choices</MenuItem>
               <MenuItem value={EAnswerType.number}>Number</MenuItem>
@@ -39,9 +45,9 @@ function Question (props : any) {
             </Select>
           </FormControl>
           <QuestionContext.Provider value={{ question, onQuestionChange }}>
-            {answerType === EAnswerType.number ? <AnswerTypeNumber /> : null}
-            {answerType === EAnswerType.fromZkProof ? <AnswerTypeZkProof /> : null}
-            {answerType === EAnswerType.multipleAnswer ? <AnswerTypeMultiple /> : null}
+            {question.answerType === EAnswerType.number ? <AnswerTypeNumber /> : null}
+            {question.answerType === EAnswerType.fromZkProof ? <AnswerTypeZkProof /> : null}
+            {question.answerType === EAnswerType.multipleAnswer ? <AnswerTypeMultiple /> : null}
           </QuestionContext.Provider>
 
           <Fab onClick={(event) => removeQuestion()} color='error' aria-label='add' variant='extended' sx={{ alignSelf: 'flex-end' }}>

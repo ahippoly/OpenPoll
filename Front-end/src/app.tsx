@@ -14,12 +14,13 @@ import BrowseSurvey from './pages/BrowseSurvey'
 
 import { WagmiConfig, createConfig, sepolia } from 'wagmi'
 import { ConnectKitProvider, ConnectKitButton, getDefaultConfig } from 'connectkit'
+import SingleSurvey from './pages/SingleSurvey'
 
 const config = createConfig(
   getDefaultConfig({
     // Required API Keys
-    alchemyId: import.meta.env.ALCHEMY_ID, // or infuraId
-    walletConnectProjectId: import.meta.env.WALLETCONNECT_PROJECT_ID,
+    alchemyId: import.meta.env.VITE_ALCHEMY_ID, // or infuraId
+    walletConnectProjectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
 
     // Required
     appName: 'OpenSurvey',
@@ -48,6 +49,7 @@ export function App () {
                 <Route path='/' element={<MainPage />} />
                 <Route path='/browse/*' element={<BrowseSurvey />} />
                 <Route path='/create' element={<CreateSurvey />} />
+                <Route path='/survey/:cid' element={<SingleSurvey />} />
               </Routes>
             </BrowserRouter>
             <CssBaseline />

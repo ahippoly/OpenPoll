@@ -63,7 +63,7 @@ async function storeWithProgress (files) {
 
 async function storeFiles (files) {
     const client = makeStorageClient()
-    const cid = await client.put(files)
+    const cid = await client.put(files, {wrapWithDirectory: false})
     console.log('stored files with cid:', cid)
     return cid
 }
@@ -82,7 +82,8 @@ app.post('/upload', async (req, res) => {
     {
       const surveyData = req.body
       console.log("🚀 ~ file: index.mjs:79 ~ app.post ~ surveyData:", surveyData)
-      const surveyName = `${surveyData.name}.json` 
+      // const surveyName = `${surveyData.title}.json` 
+      const surveyName = `survey.json` 
       const cid = await storeFiles(makeFileObjects(surveyData, surveyName));
   
       res.json({

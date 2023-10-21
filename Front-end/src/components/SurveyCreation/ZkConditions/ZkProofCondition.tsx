@@ -26,7 +26,7 @@ function ZkProofCondition (props: any) {
     <>
       <SismoGroupContext.Provider value={{ dataGroup: zkSource.dataGroup, updateSelectedSource: onUpdateSelectedSource }}>
         <SourceSelector />
-        <Typography component='h2' variant='h6'>Select a Datasource</Typography>
+        <Typography component='h2' variant='h6'>Choose a minimum condition</Typography>
         <Stack direction='row' spacing={2}>
           <Slider
             valueLabelDisplay='on'

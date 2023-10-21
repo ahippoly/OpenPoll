@@ -3,15 +3,22 @@ import { Box, FormControlLabel, Radio, RadioGroup, Slider, Stack, TextField, Too
 import ZkConditionRequired from './ZkConditionRequired'
 import HelpIcon from '@mui/icons-material/Help'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import { useState } from 'react'
 
 function SurveyQuestionMultipleAnswer (props: any) {
   const question: Question = props.question
+  const value = props.value === undefined ? -1 : props.value
+  console.log('🚀 ~ file: SurveyQuestion.tsx:11 ~ SurveyQuestionMultipleAnswer ~ value:', value)
+  const setValue = props.setValue
 
   return (
     <Box>
-      <RadioGroup>
+      <RadioGroup
+        value={value}
+        onChange={(event) => { setValue(Number(event.target.value)) }}
+      >
         {question.possibleAnswers?.map((possibleAnswer, index) => (
-          <FormControlLabel label={possibleAnswer} control={<Radio />} value={possibleAnswer} key={index} />
+          <FormControlLabel label={possibleAnswer} control={<Radio />} value={index} key={index} />
         ))}
       </RadioGroup>
     </Box>
@@ -20,8 +27,10 @@ function SurveyQuestionMultipleAnswer (props: any) {
 
 function SurveyQuestionNumberAnswer (props: any) {
   const question: Question = props.question
-
   const rangeAnswer = question.rangeAnswer || [0, 10]
+
+  const value = props.value
+  const setValue = props.setValue
 
   const marks = [
     {
@@ -37,16 +46,16 @@ function SurveyQuestionNumberAnswer (props: any) {
   return (
     <Box>
       <Stack direction='row' spacing={2}>
-        <Slider min={rangeAnswer[0]} max={rangeAnswer[1]} marks={marks} valueLabelDisplay='auto' />
+        <Slider onChange={(event, newValue) => { setValue(newValue) }} value={value} min={rangeAnswer[0]} max={rangeAnswer[1]} marks={marks} valueLabelDisplay='auto' />
         <TextField
           // onChange={handleInputChange}
           // onBlur={handleBlur}
-        //   onChange={(event) => {
-        //     updateMinimumCondition(Number(event.target.value))
-        //   }}
+          onChange={(event) => {
+            setValue(Number(event.target.value))
+          }}
           sx={{ width: 200 }}
           variant='outlined'
-        //   value={zkSource.minimumCondition}
+          value={value}
           inputProps={{
             step: 10,
             min: rangeAnswer[0],
@@ -79,12 +88,12 @@ function SurveyQuestionZkAnswer (props: any) {
   )
 }
 
-const displayByAnswerType = (question: Question) => {
+const displayByAnswerType = (question: Question, value: any, setValue: Function) => {
   switch (question.answerType) {
     case EAnswerType.multipleAnswer:
-      return (<SurveyQuestionMultipleAnswer question={question} />)
+      return (<SurveyQuestionMultipleAnswer value={value} setValue={setValue} question={question} />)
     case EAnswerType.number:
-      return (<SurveyQuestionNumberAnswer question={question} />)
+      return (<SurveyQuestionNumberAnswer value={value} setValue={setValue} question={question} />)
     case EAnswerType.fromZkProof:
       return (<SurveyQuestionZkAnswer question={question} />)
     default:
@@ -94,13 +103,14 @@ const displayByAnswerType = (question: Question) => {
 
 function SurveyQuestion (props: any) {
   const question: Question = props.question
+  const [value, setValue] = useState(-1)
 
   return (
     <Box>
       <Typography variant='h5' sx={{ mb: 2 }} textAlign='left'>
         {question.title}
       </Typography>
-      {displayByAnswerType(question)}
+      {displayByAnswerType(question, value, setValue)}
 
     </Box>
   )

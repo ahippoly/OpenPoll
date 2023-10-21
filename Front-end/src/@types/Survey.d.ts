@@ -12,12 +12,21 @@ declare global {
         tokenRewardAmount: number // In ether
         questions: Question[]
         answers: Answer[]
+        cid?: string
     }
 
     interface ProofRequire
     {
         zkProofs: ZkSource[]
         questions: Question[]
+    }
+
+    interface EmittedSurvey
+    {
+        id: string
+        name: string
+        fileCID: string
+        numberOfQuestions: number
     }
 
 }
