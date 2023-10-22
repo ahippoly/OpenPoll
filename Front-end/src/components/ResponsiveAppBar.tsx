@@ -15,22 +15,21 @@ import AdbIcon from '@mui/icons-material/Adb'
 import AssignmentIcon from '@mui/icons-material/Assignment'
 import { ConnectKitButton } from 'connectkit'
 import { Link as RouterLink } from 'react-router-dom'
-import { Link } from '@mui/material'
+import { FormControlLabel, Link, Paper, Switch } from '@mui/material'
+import { StatDisplayContext } from '@/constants/contexts'
 const pages = [{
   title: 'Browse',
   redirectTo: '/browse',
 }, {
   title: 'Create',
   redirectTo: '/create',
-}, {
-  title: 'Stats',
-  redirectTo: '/',
 }]
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 function ResponsiveAppBar () {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
+  const { displayStat, setDisplayStat } = React.useContext(StatDisplayContext)
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -70,7 +69,7 @@ function ResponsiveAppBar () {
   )
 
   return (
-    <AppBar position='static'>
+    <AppBar position='fixed'>
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
           {AppName}
@@ -142,6 +141,12 @@ function ResponsiveAppBar () {
                 </Button>
               </Link>
             ))}
+            {/* <Paper sx={{ height: 'fit-content', alignSelf: 'center' }}>
+
+              <Button onClick={() => { setDisplayStat(!displayStat) }} size='medium' variant='outlined'> {displayStat ? 'Hide Stats' : 'Show Stats'}  </Button>
+            </Paper> */}
+            {/* <FormControlLabel control={<Switch defaultChecked color='secondary' />} label='Label' /> */}
+
           </Box>
 
           <ConnectKitButton />

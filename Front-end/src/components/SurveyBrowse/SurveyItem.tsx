@@ -1,14 +1,15 @@
 import { globalPadding } from '@/constants/globalSX'
-import { Box, Divider, Paper, Stack, Typography } from '@mui/material'
+import { Box, Divider, FormControlLabel, Paper, Stack, Switch, Typography } from '@mui/material'
 import ZkConditionRequired from './ZkConditionRequired'
 import SurveyQuestion from './SurveyQuestion'
 import { AuthType, SismoConnectButton, SismoConnectResponse } from '@sismo-core/sismo-connect-react'
 import { sismoConfig } from '@/utils/Config'
 import SubmitAnswers from './SubmitAnswers'
-import { AnswerContext } from '@/constants/contexts'
-import { useEffect, useRef, useState } from 'react'
+import { AnswerContext, StatDisplayContext } from '@/constants/contexts'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { EAnswerType } from '@/@types/enums/Questions'
 import { fetchAnswers } from '@/utils/fetchTheGraph'
+import AnswerData from './AnswerData'
 
 const baseAnswerGenerator = (survey: Survey) => {
   let index = -1
@@ -108,12 +109,12 @@ const getAnswerFromLocalStorage = (survey: Survey) => {
 function SurveyItem (props: any) {
   const survey: Survey = props.survey
   const [answers, setAnswers] = useState(baseAnswerGenerator(survey))
-  const [userAnswers, setUserAnswers] = useState({})
-  const fetchedUserAnswers = useRef(false)
+  const [userAnswers, setUserAnswers] = useState<Record<string, Answers>>({})
+  const { displayStat } = useContext(StatDisplayContext)
+  const [showStat, setShowStat] = useState(false)
 
   const handleSetAnswers = (newAnswers: any) => {
     localStorage.setItem(`answer-${survey.cid}`, JSON.stringify(newAnswers))
-    const answerStored = window.localStorage.getItem(`answer-${survey.cid}`)
 
     setAnswers(newAnswers)
   }
@@ -134,6 +135,9 @@ function SurveyItem (props: any) {
     <Paper sx={{ p: globalPadding, display: 'flex', gap: 2, flexDirection: 'column' }}>
       <AnswerContext.Provider value={{ answers, handleSetAnswers }}>
         <Box>
+          <Typography variant='subtitle2' sx={{ position: 'absolute' }}>
+            <FormControlLabel control={<Switch checked={showStat} onChange={() => { setShowStat(!showStat) }} />} label='Show Stats' />
+          </Typography>
           <Typography variant='h5' sx={{ mb: 2 }}>
             {survey.title}
           </Typography>
@@ -161,7 +165,12 @@ function SurveyItem (props: any) {
 
           <Stack my={2} p={1} spacing={2} divider={<Divider variant='middle' orientation='horizontal' flexItem />}>
             {survey.questions.map((question, index) => (
-              <SurveyQuestion handleSetAnswers={handleSetAnswers} answers={answers} index={index} key={index} question={question} />
+              <Box key={index}>
+                {showStat
+                  ? <AnswerData answers={userAnswers[index]} />
+                  : <SurveyQuestion handleSetAnswers={handleSetAnswers} answers={answers} index={index} question={question} />}
+
+              </Box>
             ))}
 
           </Stack>

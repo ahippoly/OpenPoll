@@ -57,7 +57,6 @@ function SurveyList () {
   return (
     <Box sx={{ p: globalPadding, display: 'flex', gap: 2, flexDirection: 'column' }}>
       <Typography variant='h6' color='primary'>Survey List</Typography>
-      <button onClick={fetchSurveyList}>Tets</button>
       {(surveyList as Survey[])
         .map((survey, index: number) => (
           <Box key={index}>
