@@ -18,7 +18,7 @@ import { createSurveyAnsweredEvent } from "./contract-utils"
 describe("Describe entity assertions", () => {
   beforeAll(() => {
     let fileCID = "Example string value"
-    let answers = [123]
+    let answers = [BigInt.fromI32(234)]
     let zkAnswers = [BigInt.fromI32(234)]
     let newSurveyAnsweredEvent = createSurveyAnsweredEvent(
       fileCID,
@@ -49,7 +49,7 @@ describe("Describe entity assertions", () => {
       "SurveyAnswered",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
       "answers",
-      "[123]"
+      "[234]"
     )
     assert.fieldEquals(
       "SurveyAnswered",

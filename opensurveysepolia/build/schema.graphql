@@ -1,7 +1,7 @@
 type SurveyAnswered @entity(immutable: true) {
   id: Bytes!
   fileCID: String! # string
-  answers: [Int!]! # uint8[]
+  answers: [BigInt!]! # uint256[]
   zkAnswers: [BigInt!]! # uint256[]
   blockNumber: BigInt!
   blockTimestamp: BigInt!

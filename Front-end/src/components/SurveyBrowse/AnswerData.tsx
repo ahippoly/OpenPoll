@@ -72,6 +72,7 @@ function ChartLinesType (props: any) {
   const answers : Answers = props.answers
 
   const lineDataObj = buildLineDataObj(answers)
+  console.log('🚀 ~ file: AnswerData.tsx:75 ~ ChartLinesType ~ lineDataObj:', lineDataObj)
   if (lineDataObj.series.length === 0) return noDataYet()
 
   return (

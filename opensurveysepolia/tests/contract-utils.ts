@@ -4,7 +4,7 @@ import { SurveyAnswered, SurveyPublished } from "../generated/Contract/Contract"
 
 export function createSurveyAnsweredEvent(
   fileCID: string,
-  answers: Array<i32>,
+  answers: Array<BigInt>,
   zkAnswers: Array<BigInt>
 ): SurveyAnswered {
   let surveyAnsweredEvent = changetype<SurveyAnswered>(newMockEvent())
@@ -15,7 +15,10 @@ export function createSurveyAnsweredEvent(
     new ethereum.EventParam("fileCID", ethereum.Value.fromString(fileCID))
   )
   surveyAnsweredEvent.parameters.push(
-    new ethereum.EventParam("answers", ethereum.Value.fromI32Array(answers))
+    new ethereum.EventParam(
+      "answers",
+      ethereum.Value.fromUnsignedBigIntArray(answers)
+    )
   )
   surveyAnsweredEvent.parameters.push(
     new ethereum.EventParam(

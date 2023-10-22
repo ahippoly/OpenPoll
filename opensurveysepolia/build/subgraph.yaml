@@ -20,7 +20,7 @@ dataSources:
         - name: Contract
           file: Contract\abis\Contract.json
       eventHandlers:
-        - event: SurveyAnswered(string,uint8[],uint256[])
+        - event: SurveyAnswered(string,uint256[],uint256[])
           handler: handleSurveyAnswered
         - event: SurveyPublished(string,string,uint32,uint256,uint256,(uint256,bytes16)[],bytes16[])
           handler: handleSurveyPublished

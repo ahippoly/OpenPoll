@@ -67,17 +67,17 @@ export class SurveyAnswered extends Entity {
     this.set("fileCID", Value.fromString(value));
   }
 
-  get answers(): Array<i32> {
+  get answers(): Array<BigInt> {
     let value = this.get("answers");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toI32Array();
+      return value.toBigIntArray();
     }
   }
 
-  set answers(value: Array<i32>) {
-    this.set("answers", Value.fromI32Array(value));
+  set answers(value: Array<BigInt>) {
+    this.set("answers", Value.fromBigIntArray(value));
   }
 
   get zkAnswers(): Array<BigInt> {

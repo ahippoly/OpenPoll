@@ -29,7 +29,7 @@ const buildTotalByEntry = (index: number, fetchedAnswers: FetchedUserAnswer[], q
   const totalByEntry: any = {}
 
   fetchedAnswers.forEach((answer) => {
-    const userAnswer = answer.answers[index]
+    const userAnswer = question.answerType === EAnswerType.fromZkProof ? answer.zkAnswers[index] : answer.answers[index]
 
     if (!totalByEntry[userAnswer]) {
       totalByEntry[userAnswer] = 0
@@ -124,6 +124,7 @@ function SurveyItem (props: any) {
     if (survey.cid) {
       fetchAnswers(survey.cid)
         .then((answers: FetchedUserAnswer[]) => {
+          console.log('🚀 ~ file: SurveyItem.tsx:127 ~ .then ~ answers:', answers)
           const buildedAnswers = buildAnswersList(survey, answers)
           console.log('🚀 ~ file: SurveyItem.tsx:105 ~ .then ~ buildedAnswers:', buildedAnswers)
           setUserAnswers(buildedAnswers)

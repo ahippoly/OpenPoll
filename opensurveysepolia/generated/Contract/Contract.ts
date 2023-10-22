@@ -27,8 +27,8 @@ export class SurveyAnswered__Params {
     return this._event.parameters[0].value.toString();
   }
 
-  get answers(): Array<i32> {
-    return this._event.parameters[1].value.toI32Array();
+  get answers(): Array<BigInt> {
+    return this._event.parameters[1].value.toBigIntArray();
   }
 
   get zkAnswers(): Array<BigInt> {
@@ -488,8 +488,8 @@ export class AnswerSurveyCall__Inputs {
     return this._call.inputValues[1].value.toBytes();
   }
 
-  get answers(): Array<i32> {
-    return this._call.inputValues[2].value.toI32Array();
+  get answers(): Array<BigInt> {
+    return this._call.inputValues[2].value.toBigIntArray();
   }
 }
 

@@ -24,9 +24,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint8[]",
+        "internalType": "uint256[]",
         "name": "answers",
-        "type": "uint8[]"
+        "type": "uint256[]"
       },
       {
         "indexed": false,
@@ -137,11 +137,11 @@
         "name": "sismoConnectResponse",
         "type": "bytes"
       },
-      { "internalType": "uint8[]", "name": "answers", "type": "uint8[]" }
+      { "internalType": "uint256[]", "name": "answers", "type": "uint256[]" }
     ],
     "name": "answerSurvey",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
