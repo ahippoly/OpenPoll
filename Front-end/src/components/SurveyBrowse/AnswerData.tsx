@@ -61,8 +61,8 @@ function CircleChart (props: any) {
           fontSize: 14,
         },
       }}
-      width={400}
-      height={400}
+      // width={600}
+      height={250}
     />
   // </Box>
   )

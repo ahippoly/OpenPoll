@@ -13,15 +13,6 @@
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "update-deps": "node ./src/config/update-deps.mjs"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not ie <= 99",
-      "not android <= 4.4.4",
-      "not dead",
-      "not op_mini all"
-    ]
-  },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
