@@ -18,7 +18,7 @@ import ClearIcon from '@mui/icons-material/Clear'
 
 function getAnswerFromLocalStorage (cid: string) {
   const answerStored = window.localStorage.getItem(`answer-${cid}`)
-  if (!answerStored) return {}
+  if (!answerStored) return []
   const answers = JSON.parse(answerStored)
   const answerArrayForTransaction : any[] = []
 

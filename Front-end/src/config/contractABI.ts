@@ -32,9 +32,9 @@ export const contractABI = [
       },
       {
         indexed: false,
-        internalType: 'uint8[]',
+        internalType: 'uint256[]',
         name: 'answers',
-        type: 'uint8[]',
+        type: 'uint256[]',
       },
       {
         indexed: false,
@@ -172,14 +172,14 @@ export const contractABI = [
         type: 'bytes',
       },
       {
-        internalType: 'uint8[]',
+        internalType: 'uint256[]',
         name: 'answers',
-        type: 'uint8[]',
+        type: 'uint256[]',
       },
     ],
     name: 'answerSurvey',
     outputs: [],
-    stateMutability: 'payable',
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {

@@ -1,6 +1,6 @@
 specVersion: 0.0.5
 schema:
-  file: schema.graphql
+  file: ./schema.graphql
 dataSources:
   - kind: ethereum
     name: Contract
@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0x634B938800eFDfB3DEaf9Ab5a528c0e7c076fFa8"
       abi: Contract
-      startBlock: 4539447
+      startBlock: 04539447
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -18,10 +18,10 @@ dataSources:
         - SurveyPublished
       abis:
         - name: Contract
-          file: Contract\abis\Contract.json
+          file: ./abis/Contract.json
       eventHandlers:
-        - event: SurveyAnswered(string,uint8[],uint256[])
+        - event: SurveyAnswered(string,uint256[],uint256[])
           handler: handleSurveyAnswered
         - event: SurveyPublished(string,string,uint32,uint256,uint256,(uint256,bytes16)[],bytes16[])
           handler: handleSurveyPublished
-      file: Contract\Contract.wasm
+      file: ./src/contract.ts
