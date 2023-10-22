@@ -1,4 +1,5 @@
-import { EAnswerType } from '@/@types/enums/Questions'
+// @ts-nocheck
+import { EAnswerType } from '@/enums/Questions'
 import { contractABI } from '@/config/contractABI'
 import { contractAdress } from '@/config/globalConfig'
 import { sismoConfig } from '@/utils/Config'

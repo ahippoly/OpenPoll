@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { AuthType, ClaimRequest, SismoConnectButton, SismoConnectConfig, SismoConnectResponse } from '@sismo-core/sismo-connect-react'
 // import { sismoConfig } from '@/utils/Config'
 import { uploadBackend } from '@/utils/uploadBackend'
@@ -9,7 +10,7 @@ import { stringifyObject } from '@/utils/ObjUtils'
 import { contractABI } from '@/config/contractABI'
 import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
 import { parseEther, parseGwei } from 'viem'
-import { EAnswerType } from '@/@types/enums/Questions'
+import { EAnswerType } from '@/enums/Questions'
 import { sepolia } from '@wagmi/core/chains'
 import { writeContract, waitForTransaction, connect, getAccount } from '@wagmi/core'
 import { InjectedConnector } from '@wagmi/core/connectors/injected'

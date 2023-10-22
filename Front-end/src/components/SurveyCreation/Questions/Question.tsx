@@ -1,5 +1,5 @@
 import { Card, CardContent, Fab, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material'
-import { EAnswerType } from '@/@types/enums/Questions'
+import { EAnswerType } from '@/enums/Questions'
 import { createContext, useState } from 'react'
 import AnswerTypeNumber from './AnswerTypeNumber'
 import AnswerTypeZkProof from './AnswerTypeZkProof'

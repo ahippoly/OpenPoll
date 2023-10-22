@@ -2,12 +2,12 @@ import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Paper, Select
 import { useEffect, useReducer, useState } from 'react'
 import SurveyItem from './SurveyItem'
 import { globalPadding } from '@/constants/globalSX'
-import { EAnswerType } from '@/@types/enums/Questions'
+import { EAnswerType } from '@/enums/Questions'
 import { defaultSurvey } from '@/mocks/SurveyMock'
 import { stringifyObject } from '@/utils/ObjUtils'
 import { graphQueryUrl } from '@/config/globalConfig'
 import { fetchSurveyList } from '@/utils/fetchTheGraph'
-import { ELoadingState } from '@/@types/enums/Loading'
+import { ELoadingState } from '@/enums/Loading'
 import { fetchFileCID } from '@/utils/fetchIPFS'
 
 export const surveyListReducerFunc = (state: any, action: ReducerPayload) => {

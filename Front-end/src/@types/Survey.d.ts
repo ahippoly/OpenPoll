@@ -1,4 +1,4 @@
-import { EAnswerType } from './enums/Questions'
+import { EAnswerType } from '../enums/Questions'
 
 export {}
 

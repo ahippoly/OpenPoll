@@ -7,7 +7,7 @@ import { sismoConfig } from '@/utils/Config'
 import SubmitAnswers from './SubmitAnswers'
 import { AnswerContext, StatDisplayContext } from '@/constants/contexts'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { EAnswerType } from '@/@types/enums/Questions'
+import { EAnswerType } from '@/enums/Questions'
 import { fetchAnswers } from '@/utils/fetchTheGraph'
 import AnswerData from './AnswerData'
 

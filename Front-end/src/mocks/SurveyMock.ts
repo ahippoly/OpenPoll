@@ -1,4 +1,4 @@
-import { EAnswerType } from '@/@types/enums/Questions'
+import { EAnswerType } from '@/enums/Questions'
 import { clone } from '@/utils/ObjUtils'
 
 export const defaultSismoGroup1: SismoGroup = {

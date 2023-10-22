@@ -1,4 +1,4 @@
-import { EAnswerType } from '@/@types/enums/Questions'
+import { EAnswerType } from '@/enums/Questions'
 import { Box, Typography } from '@mui/material'
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart'
 import { LineChart } from '@mui/x-charts/LineChart'

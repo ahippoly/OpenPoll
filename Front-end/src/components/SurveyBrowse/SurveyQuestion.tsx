@@ -1,4 +1,4 @@
-import { EAnswerType } from '@/@types/enums/Questions'
+import { EAnswerType } from '@/enums/Questions'
 import { Box, FormControlLabel, Radio, RadioGroup, Slider, Stack, TextField, Tooltip, Typography } from '@mui/material'
 import ZkConditionRequired from './ZkConditionRequired'
 import HelpIcon from '@mui/icons-material/Help'

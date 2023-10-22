@@ -1,4 +1,4 @@
-import { ELoadingState } from '@/@types/enums/Loading'
+import { ELoadingState } from '@/enums/Loading'
 import SurveyItem from '@/components/SurveyBrowse/SurveyItem'
 import { defaultSurvey } from '@/mocks/SurveyMock'
 import { clone } from '@/utils/ObjUtils'
