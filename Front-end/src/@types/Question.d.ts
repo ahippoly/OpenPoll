@@ -13,11 +13,18 @@ declare global {
         zkAnswer?: SismoGroup
     }
 
-    interface Answer
+    interface Answers
     {
         answerType: keyof typeof EAnswerType
-        questionIndex: number
-        totalByEntry: string[]
+        questionTitle: string
+        totalByEntry: Record<string, number>
+    }
+
+    interface FetchedUserAnswer
+    {
+        fileCID: string
+        answers: string[]
+        zkAnswers: string[]
     }
 
 }

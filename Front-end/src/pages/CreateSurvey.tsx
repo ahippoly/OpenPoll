@@ -15,7 +15,6 @@ function CreateSurvey () {
     endTimestamp: 0,
     tokenRewardAmount: 0,
     questions: [],
-    answers: [],
   })
 
   const updateTitle = (title: string) => {

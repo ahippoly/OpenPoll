@@ -79,11 +79,11 @@ function ConfirmCreation () {
       fileCID,
       numberOfClassiQuestions,
       surveyObj.tokenRewardAmount,
-      surveyObj.endTimestamp,
+      surveyObj.endTimestamp || '21474836470',
       zkSources,
       questionsZkSources,
     ]
-    // console.log('🚀 ~ file: ConfirmCreation.tsx:59 ~ promptTransaction ~ args:', args)
+    console.log('🚀 ~ file: ConfirmCreation.tsx:59 ~ promptTransaction ~ args:', args)
 
     setIsPendingTransact(true)
     writeContract({

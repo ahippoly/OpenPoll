@@ -41,7 +41,6 @@ function SurveyList () {
 
   const processFilesCID = () => {
     if (!emittedSurveyList || emittedSurveyList.length === 0) return
-    console.log('🚀 ~ file: SurveyList.tsx:44 ~ processFilesCID ~ emittedSurveyList:', emittedSurveyList)
     emittedSurveyList.forEach((emittedSurvey: EmittedSurvey) => {
       fetchFileCID(emittedSurvey.fileCID)
         .then((surveyData: Survey) => {

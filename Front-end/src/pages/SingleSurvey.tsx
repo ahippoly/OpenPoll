@@ -19,6 +19,7 @@ function SingleSurvey () {
     setFetchCount(fetchCount + 1)
     fetchFileCID(cid)
       .then((surveyData: Survey) => {
+        surveyData.cid = cid
         setSurvey(surveyData)
         setLoadingState(ELoadingState.loaded)
       })

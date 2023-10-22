@@ -3,12 +3,12 @@ import { Box, FormControlLabel, Radio, RadioGroup, Slider, Stack, TextField, Too
 import ZkConditionRequired from './ZkConditionRequired'
 import HelpIcon from '@mui/icons-material/Help'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { AnswerContext } from '@/constants/contexts'
 
 function SurveyQuestionMultipleAnswer (props: any) {
   const question: Question = props.question
   const value = props.value === undefined ? -1 : props.value
-  console.log('🚀 ~ file: SurveyQuestion.tsx:11 ~ SurveyQuestionMultipleAnswer ~ value:', value)
   const setValue = props.setValue
 
   return (
@@ -30,6 +30,7 @@ function SurveyQuestionNumberAnswer (props: any) {
   const rangeAnswer = question.rangeAnswer || [0, 10]
 
   const value = props.value
+  console.log('🚀 ~ file: SurveyQuestion.tsx:33 ~ SurveyQuestionNumberAnswer ~ value:', value)
   const setValue = props.setValue
 
   const marks = [
@@ -103,14 +104,24 @@ const displayByAnswerType = (question: Question, value: any, setValue: Function)
 
 function SurveyQuestion (props: any) {
   const question: Question = props.question
-  const [value, setValue] = useState(-1)
+  const handleSetAnswers = props.handleSetAnswers
+  const answers = props.answers
+  const index = props.index
+  const value = answers[index]
+
+  const setValueState = (newValue: any) => {
+    handleSetAnswers({
+      ...answers,
+      [index]: newValue,
+    })
+  }
 
   return (
     <Box>
       <Typography variant='h5' sx={{ mb: 2 }} textAlign='left'>
         {question.title}
       </Typography>
-      {displayByAnswerType(question, value, setValue)}
+      {displayByAnswerType(question, value, setValueState)}
 
     </Box>
   )

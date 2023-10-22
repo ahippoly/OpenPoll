@@ -54,5 +54,4 @@ export const defaultSurvey: Survey = {
   zkProofs: [clone(defaultZkSource1), clone(defaultZkSource2)],
   endTimestamp: 0,
   tokenRewardAmount: 0,
-  answers: [],
 }

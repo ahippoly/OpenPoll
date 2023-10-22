@@ -11,7 +11,6 @@ declare global {
         endTimestamp: number
         tokenRewardAmount: number // In ether
         questions: Question[]
-        answers: Answer[]
         cid?: string
     }
 

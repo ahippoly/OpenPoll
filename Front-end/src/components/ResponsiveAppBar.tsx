@@ -17,7 +17,7 @@ import { ConnectKitButton } from 'connectkit'
 import { Link as RouterLink } from 'react-router-dom'
 import { Link } from '@mui/material'
 const pages = [{
-  title: 'Answer',
+  title: 'Browse',
   redirectTo: '/browse',
 }, {
   title: 'Create',
