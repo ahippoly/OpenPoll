@@ -7,14 +7,20 @@ import DefineParameters from '@/components/SurveyCreation/DefineParameters'
 import { uploadBackend } from '@/utils/uploadBackend'
 import ConfirmCreation from '@/components/SurveyCreation/ConfirmCreation'
 import { SismoButtonContext, SurvveyCreationContext } from '@/constants/contexts'
+import { clone } from '@/utils/ObjUtils'
+import { defaultQuestion1, defaultZkSource0, defaultZkSource1 } from '@/mocks/SurveyMock'
 
 function CreateSurvey () {
   const [surveyObj, setSurveyObj] = useState<Survey>({
     title: '',
-    zkProofs: [],
+    zkProofs: [
+      clone(defaultZkSource0),
+    ],
     endTimestamp: 0,
     tokenRewardAmount: 0,
-    questions: [],
+    questions: [
+      clone(defaultQuestion1),
+    ],
   })
 
   const updateTitle = (title: string) => {
@@ -38,9 +44,9 @@ function CreateSurvey () {
     >
       <SurvveyCreationContext.Provider value={{ surveyObj, setSurveyObj }}>
         <Typography variant='h2'>
-          Create new Poll
+          Create new Survey
         </Typography>
-        <TextField onChange={(event) => updateTitle(event.target.value)} label='Poll name' variant='outlined' />
+        <TextField onChange={(event) => updateTitle(event.target.value)} label='Survey name' variant='outlined' />
 
         <Questions />
         <DefineZkProofs />

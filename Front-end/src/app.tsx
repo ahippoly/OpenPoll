@@ -50,7 +50,7 @@ export function App () {
                 <ResponsiveAppBar />
                 <Box sx={{ marginTop: '70px' }} />
                 <Routes>
-                  <Route path='/' element={<MainPage />} />
+                  <Route path='/' element={<BrowseSurvey />} />
                   <Route path='/browse/*' element={<BrowseSurvey />} />
                   <Route path='/create' element={<CreateSurvey />} />
                   <Route path='/survey/:cid' element={<SingleSurvey />} />

@@ -135,10 +135,10 @@ function SurveyItem (props: any) {
     <Paper sx={{ p: globalPadding, display: 'flex', gap: 2, flexDirection: 'column' }}>
       <AnswerContext.Provider value={{ answers, handleSetAnswers }}>
         <Box>
-          <Typography variant='subtitle2' sx={{ position: 'absolute' }}>
+          <Typography variant='subtitle2' sx={{ textAlign: 'left' }}>
             <FormControlLabel control={<Switch checked={showStat} onChange={() => { setShowStat(!showStat) }} />} label='Show Stats' />
           </Typography>
-          <Typography variant='h5' sx={{ mb: 2 }}>
+          <Typography variant='h4' color='primary' sx={{ mb: 2, fontWeight: 500 }}>
             {survey.title}
           </Typography>
 
@@ -147,6 +147,9 @@ function SurveyItem (props: any) {
             <svg xmlns='http://www.w3.org/2000/svg' height='1em' viewBox='0 0 320 512'>
               <path d='M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z' />
             </svg>
+          </Typography>
+          <Typography variant='subtitle1' sx={{ textAlign: 'center' }}>
+            {survey.endTimestamp === 0 ? 'No end date' : `End date : ${new Date(survey.endTimestamp * 1000).toLocaleDateString()}`}
           </Typography>
 
           <Box>

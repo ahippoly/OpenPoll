@@ -6,10 +6,13 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, Typography } from '@mui/material'
 import { AuthType, ClaimRequest, ClaimType, SismoConnect, SismoConnectButton, SismoConnectResponse } from '@sismo-core/sismo-connect-react'
 import { useState } from 'react'
-import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
+import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
 import { writeContract, waitForTransaction } from '@wagmi/core'
 import { useParams } from 'react-router'
 import DoneIcon from '@mui/icons-material/Done'
+import { useModal } from 'connectkit'
+import UploadIcon from '@mui/icons-material/Upload'
+import ClearIcon from '@mui/icons-material/Clear'
 
 // function generateSismoParams = () => {}
 
@@ -54,26 +57,91 @@ const generateClaims = (survey: Survey) => {
   return claims
 }
 
-const promptTransaction = (sismoResponse: string, cid: string) => {
-  const args = [cid, sismoResponse, getAnswerFromLocalStorage(cid)]
-  console.log('🚀 ~ file: SubmitAnswers.tsx:59 ~ promptTransaction ~ args:', args)
-
-  writeContract({
-    address: contractAdress,
-    abi: contractABI,
-    functionName: 'answerSurvey',
-    args,
-  })
-}
-
 function SubmitAnswers (props: any) {
   const survey: Survey = props.survey
   const { cid: cidParams } = useParams<{cid: string}>()
   const cid = cidParams || survey.cid
 
   const [sismoResponseBytes, setsismoResponseBytes] = useState('')
+  const [isPendingTransact, setIsPendingTransact] = useState(false)
+  const [isProcessingTransact, setIsProcessingTransact] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [hasError, sethasError] = useState(false)
 
+  const { address, isConnecting, isDisconnected } = useAccount()
+  const connectKit = useModal()
+
+  const isConnected = address!!
   const claims: ClaimRequest[] = generateClaims(survey)
+
+  const onError = (error: any) => {
+    console.error(error)
+    sethasError(true)
+    setTimeout(() => {
+      sethasError(false)
+    }, 3000)
+  }
+
+  const promptTransaction = (sismoResponse: string, cid: string) => {
+    const args = [cid, sismoResponse, getAnswerFromLocalStorage(cid)]
+    console.log('🚀 ~ file: SubmitAnswers.tsx:59 ~ promptTransaction ~ args:', args)
+
+    if (!isConnected) {
+      connectKit.setOpen(true)
+      return
+    }
+    setIsPendingTransact(true)
+    writeContract({
+      address: contractAdress,
+      abi: contractABI,
+      functionName: 'answerSurvey',
+      args,
+    }).then((res) => {
+      const hash: any = res.hash
+      setIsProcessingTransact(true)
+      waitForTransaction({ hash })
+        .then(() => {
+          setIsSubmitted(true)
+          setTimeout(() => {
+            setIsSubmitted(false)
+          }, 15000)
+        })
+        .catch(onError)
+        .finally(() => setIsProcessingTransact(false))
+      console.log('🚀 ~ file: ConfirmCreation.tsx:59 ~ promptTransaction ~ res:', res)
+    })
+      .catch(onError)
+      .finally(() => setIsPendingTransact(false))
+  }
+
+  const buttonMessage = (() => {
+    if (hasError) return 'Error'
+    if (isSubmitted) return 'Success'
+    if (!isConnected) return 'Connect Wallet'
+    if (isPendingTransact) return 'Waiting for confirmation'
+    if (isProcessingTransact) return 'Deploying on blockchain'
+    return 'Submit'
+  })()
+
+  const buttonColor = (() => {
+    if (hasError) return 'error'
+    if (isSubmitted) return 'success'
+    if (!isConnected) return 'primary'
+    if (isPendingTransact) return 'warning'
+    if (isProcessingTransact) return 'warning'
+    return 'primary'
+  })()
+
+  const buttonIcon = (() => {
+    if (hasError) return <ClearIcon />
+    if (isSubmitted) return <DoneIcon />
+    if (!isConnected) return <UploadIcon />
+    if (isPendingTransact) return <UploadIcon />
+    if (isProcessingTransact) return <UploadIcon />
+    return <UploadIcon />
+  })()
+
+  const isLoading = isPendingTransact || isProcessingTransact
 
   const submitSurvey = async () => {
     if (!cid) return
@@ -132,8 +200,15 @@ function SubmitAnswers (props: any) {
               </Typography>
             </Box>
 
-            <LoadingButton variant='outlined' onClick={submitSurvey}>
-              Submit
+            <LoadingButton
+              size='large'
+              startIcon={buttonIcon}
+              color={buttonColor}
+              loadingPosition='start'
+              loading={isLoading}
+              variant='outlined' onClick={submitSurvey}
+            >
+              {buttonMessage}
             </LoadingButton>
           </>
           )}

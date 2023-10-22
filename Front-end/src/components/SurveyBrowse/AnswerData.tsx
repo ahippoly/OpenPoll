@@ -1,7 +1,8 @@
 import { EAnswerType } from '@/@types/enums/Questions'
 import { Box, Typography } from '@mui/material'
-import { PieChart } from '@mui/x-charts/PieChart'
+import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart'
 import { LineChart } from '@mui/x-charts/LineChart'
+import { DefaultizedPieValueType } from '@mui/x-charts/models/seriesType'
 
 const buildDataArrayFromAnswers = (answers: Answers) => {
   const dataArray: any = []
@@ -38,18 +39,32 @@ function CircleChart (props: any) {
 
   const dataArray = buildDataArrayFromAnswers(answers)
   if (dataArray.length === 0) return noDataYet()
+
+  const TOTAL = dataArray.map((item: any) => item.value).reduce((a: any, b: any) => a + b, 0)
+
+  const getArcLabel = (params: DefaultizedPieValueType) => {
+    const percent = params.value / TOTAL
+    return `${(percent * 100).toFixed(0)}%`
+  }
   console.log('🚀 ~ file: AnswerData.tsx:22 ~ AnswerData ~ dataArray:', dataArray)
 
   return (
+  // <Box sx={{ display: 'flex', justifyContent: 'center' }}>
     <PieChart
-      sx={{ margin: 'auto' }}
       series={[{
         data: dataArray,
+        arcLabel: getArcLabel,
       }]}
+      sx={{
+        [`& .${pieArcLabelClasses.root}`]: {
+          fill: 'white',
+          fontSize: 14,
+        },
+      }}
       width={400}
       height={400}
     />
-
+  // </Box>
   )
 }
 

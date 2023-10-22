@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from '@mui/material'
+import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Paper, Select, Typography } from '@mui/material'
 import { useEffect, useReducer, useState } from 'react'
 import SurveyItem from './SurveyItem'
 import { globalPadding } from '@/constants/globalSX'
@@ -56,7 +56,32 @@ function SurveyList () {
 
   return (
     <Box sx={{ p: globalPadding, display: 'flex', gap: 2, flexDirection: 'column' }}>
+      {/* <FormControl fullWidth>
+        <InputLabel id='demo-simple-select-label'>Age</InputLabel>
+        <Select
+          labelId='demo-simple-select-label'
+          id='demo-simple-select'
+          value={age}
+          label='Age'
+          onChange={handleChange}
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl> */}
+
       <Typography variant='h6' color='primary'>Survey List</Typography>
+      {
+      loadingState === ELoadingState.loading
+        ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 10 }}>
+            <CircularProgress size={80} />
+          </Box>
+          )
+        : null
+}
+
       {(surveyList as Survey[])
         .map((survey, index: number) => (
           <Box key={index}>

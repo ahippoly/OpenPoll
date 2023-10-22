@@ -9,6 +9,14 @@ export const defaultSismoGroup1: SismoGroup = {
   numberOfAccounts: 820126,
 }
 
+export const defaultSismoGroup0: SismoGroup = {
+  description: 'Data Group of all addresses that own a Gitcoin Passport',
+  id: '0x1cde61966decb8600dfd0749bd371f12',
+  name: 'gitcoin-passport-holders',
+  specs: 'Contains all addresses that own a Gitcoin Passport. The value of each group member corresponds to their Gitcoin Passport score.',
+  numberOfAccounts: 730373,
+}
+
 export const defaultSismoGroup2: SismoGroup = {
   description: 'Data Group of all rAAVE attendee',
   id: '0xcde5892370aeb8f486b5d85a519aaa1a',
@@ -41,6 +49,11 @@ export const defaultQuestion3: Question = {
 export const defaultZkSource1: ZkSource = {
   minimumCondition: 10,
   dataGroup: defaultSismoGroup1,
+}
+
+export const defaultZkSource0: ZkSource = {
+  minimumCondition: 10,
+  dataGroup: defaultSismoGroup0,
 }
 
 export const defaultZkSource2: ZkSource = {

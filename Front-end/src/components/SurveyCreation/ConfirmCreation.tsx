@@ -7,14 +7,19 @@ import { SismoButtonContext, SurvveyCreationContext } from '@/constants/contexts
 import LoadingButton from '@mui/lab/LoadingButton'
 import { stringifyObject } from '@/utils/ObjUtils'
 import { contractABI } from '@/config/contractABI'
-import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
+import { useAccount, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
 import { parseEther, parseGwei } from 'viem'
 import { EAnswerType } from '@/@types/enums/Questions'
-import { writeContract, waitForTransaction } from '@wagmi/core'
+import { sepolia } from '@wagmi/core/chains'
+import { writeContract, waitForTransaction, connect, getAccount } from '@wagmi/core'
+import { InjectedConnector } from '@wagmi/core/connectors/injected'
 import { contractAdress } from '@/config/globalConfig'
 import InputRewardPool from './InputRewardPool'
 import SaveIcon from '@mui/icons-material/Save'
 import UploadIcon from '@mui/icons-material/Upload'
+import { useModal } from 'connectkit'
+import DoneIcon from '@mui/icons-material/Done'
+import ClearIcon from '@mui/icons-material/Clear'
 
 function ConfirmCreation () {
   const { surveyObj: surveyObjData, setSurveyObj } = useContext(SurvveyCreationContext)
@@ -23,8 +28,11 @@ function ConfirmCreation () {
   const [submitedSurveyObj, setSubmitedSurveyObj] = useState({})
   const [isPendingTransact, setIsPendingTransact] = useState(false)
   const [isProcessingTransact, setIsProcessingTransact] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [hasError, sethasError] = useState(false)
   const [dialogOpened, setDialogOpened] = useState(false)
-  // const
+  const { address, isConnecting, isDisconnected } = useAccount()
+  const connectKit = useModal()
 
   const surveyObj = surveyObjData as Survey
 
@@ -37,12 +45,42 @@ function ConfirmCreation () {
   //   [],
   //   [],
   // ]
+  const isConnected = address!!
+
+  const onError = (error: any) => {
+    console.error(error)
+    sethasError(true)
+    setTimeout(() => {
+      sethasError(false)
+    }, 3000)
+  }
 
   const buttonMessage = (() => {
+    if (hasError) return 'Error'
+    if (isSubmitted) return 'Success'
+    if (!isConnected) return 'Connect Wallet'
     if (isLoadingIPFS) return 'Publishing on IPFS'
     if (isPendingTransact) return 'Waiting for confirmation'
     if (isProcessingTransact) return 'Deploying on blockchain'
     return 'Submit'
+  })()
+
+  const buttonColor = (() => {
+    if (hasError) return 'error'
+    if (isSubmitted) return 'success'
+    if (!isConnected) return 'primary'
+    if (isPendingTransact) return 'warning'
+    if (isProcessingTransact) return 'warning'
+    return 'primary'
+  })()
+
+  const buttonIcon = (() => {
+    if (hasError) return <ClearIcon />
+    if (isSubmitted) return <DoneIcon />
+    if (!isConnected) return <UploadIcon />
+    if (isPendingTransact) return <UploadIcon />
+    if (isProcessingTransact) return <UploadIcon />
+    return <UploadIcon />
   })()
 
   const isLoading = isLoadingIPFS || isPendingTransact || isProcessingTransact
@@ -78,13 +116,17 @@ function ConfirmCreation () {
       surveyObj.title,
       fileCID,
       numberOfClassiQuestions,
-      surveyObj.tokenRewardAmount,
+      parseEther(surveyObj.tokenRewardAmount.toString()),
       surveyObj.endTimestamp || '21474836470',
       zkSources,
       questionsZkSources,
     ]
     console.log('🚀 ~ file: ConfirmCreation.tsx:59 ~ promptTransaction ~ args:', args)
 
+    if (!isConnected) {
+      connectKit.setOpen(true)
+      return
+    }
     setIsPendingTransact(true)
     writeContract({
       address: contractAdress,
@@ -97,9 +139,17 @@ function ConfirmCreation () {
         const hash: any = res.hash
         setIsProcessingTransact(true)
         waitForTransaction({ hash })
+          .then(() => {
+            setIsSubmitted(true)
+            setTimeout(() => {
+              setIsSubmitted(false)
+            }, 15000)
+          })
+          .catch(onError)
           .finally(() => setIsProcessingTransact(false))
         console.log('🚀 ~ file: ConfirmCreation.tsx:59 ~ promptTransaction ~ res:', res)
       })
+      .catch(onError)
       .finally(() => setIsPendingTransact(false))
   }
 
@@ -125,7 +175,8 @@ function ConfirmCreation () {
       {/* {stringifyObject(surveyObj)} */}
       <LoadingButton
         size='large'
-        startIcon={<UploadIcon />}
+        color={buttonColor}
+        startIcon={buttonIcon}
         loadingPosition='start' loading={isLoading} variant='outlined' onClick={submitSurvey}
       >
         {buttonMessage}

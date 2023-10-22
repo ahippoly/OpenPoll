@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from 'react'
 function DefineParameters () {
   const { surveyObj, setSurveyObj } = useContext(SurvveyCreationContext)
   const [hasTokenRewards, setHasTokenRewards] = useState(false)
+  const [hasEndTime, setHasEndTime] = useState(false)
 
   const setEndTimestamp = (endTimestamp: number) => {
     setSurveyObj((previous: Survey) => {
@@ -27,7 +28,10 @@ function DefineParameters () {
   }
 
   const onCheckNoEndTime = (event: any) => {
-    if (surveyObj.endTimestamp === 0) { setEndTimestamp(Date.now()) } else { setEndTimestamp(0) }
+    if (hasEndTime) {
+      setEndTimestamp(0)
+    }
+    setHasEndTime(!hasEndTime)
   }
 
   const onCheckHasReward = (event: any) => {
@@ -37,18 +41,25 @@ function DefineParameters () {
     } else { setHasTokenRewards(true) }
   }
 
+  const onChangeDate = (date: any) => {
+    console.log('🚀 ~ file: DefineParameters.tsx:41 ~ onChangeDate ~ date:', date)
+    const endTimestamp = date.toDate().valueOf() * 0.001
+    setEndTimestamp(endTimestamp)
+    console.log('🚀 ~ file: DefineParameters.tsx:44 ~ onChangeDate ~ endTimestamp:', endTimestamp)
+  }
+
   return (
     <Paper variant='outlined' sx={{ display: 'flex', flexDirection: 'column', p: globalPadding }}>
       <Typography component='h2' variant='h6' color='primary' gutterBottom>
         Define Parameters
       </Typography>
-      {surveyObj.endTimestamp !== 0
+      {hasEndTime
         ? (
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker label='Set end of the poll' />
+            <DatePicker onChange={onChangeDate} label='Set end of the survey' />
           </LocalizationProvider>)
         : null}
-      <FormControlLabel control={<Checkbox onChange={onCheckNoEndTime} checked={surveyObj.endTimestamp === 0} />} label='This poll has no end time' />
+      <FormControlLabel control={<Checkbox onChange={onCheckNoEndTime} checked={!hasEndTime} />} label='This survey has no end time' />
       <FormControlLabel onChange={onCheckHasReward} checked={hasTokenRewards} control={<Checkbox />} label='Define tokens as reward (in ether)' />
 
       {hasTokenRewards
