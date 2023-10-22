@@ -174,7 +174,7 @@ function SubmitAnswers (props: any) {
             // Send the response to your contract to verify it
             // thanks to the @sismo-core/sismo-connect-solidity package
             }}
-            callbackUrl={`${import.meta.env.VITE_BASE_URL}/survey/${cid}`}
+            callbackUrl={`${window.location.origin}/survey/${cid}`}
           />
           )
         : (
